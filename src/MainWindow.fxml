@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.HBox?>
+<?import Client.BoardDisplayerControl?>
+
+<?import View.Controls.BoardDisplayerControl?>
+<BorderPane fx:id="rootBorder"
+            xmlns="http://javafx.com/javafx/10.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Client.MainWindowController">
+   <top>
+       <HBox spacing="5">
+           <Button text="Settings" onAction="#showSettings"/>
+           <Button text="Top 10" onAction="#showTop10"/>
+           <Button text="Theme Manager" onAction="#showThemeDialog"/>
+           <Button text="Game Timer" onAction="#showTimer"/>
+       </HBox>
+   </top>
+    <center>
+        <BoardDisplayerControl fx:id="boardDisplayer"
+                               height="300.0"
+                               width="300.0"
+                               BorderPane.alignment="CENTER"/>
+    </center>
+</BorderPane>
