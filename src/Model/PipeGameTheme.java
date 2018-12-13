@@ -1,9 +1,11 @@
 package Model;
 
+import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.media.AudioClip;
 
+import java.util.HashMap;
 import java.util.Observable;
 
 import static javafx.scene.media.AudioClip.INDEFINITE;
@@ -11,18 +13,24 @@ import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class PipeGameTheme extends Observable implements ThemeModel {
 
+    // C-TOR
+    public PipeGameTheme() {
+        this.loadBackgroundMusic();
+        this.loadGameChildImages();
+        //this.loadStyleSheet();
+    }
+
+    // Variables
     private String backgroundMusicPath;
     private String styleSheetPath;
-    private String gameChildImagePath;
+    private String startPipeImage;
+    private String goalPipeImage;
+    private String verticalPipeImage;
+    private String cornerPipeImage;
 
-    public String getBackgroundMusicPath() {
-        return backgroundMusicPath;
-    }
 
-    public void setBackgroundMusicPath(String backgroundMusicPath) {
-        this.backgroundMusicPath = backgroundMusicPath;
-    }
-
+    // Methods
+    @Override
     public Task loadBackgroundMusic() {
         Task task = new Task() {
 
@@ -50,27 +58,27 @@ public class PipeGameTheme extends Observable implements ThemeModel {
         notifyObservers();
     }
 
-    public String getStyleSheetPath() {
-        return styleSheetPath;
+    @Override
+    public void loadGameChildImages() {
+        startPipeImage = "./resources/startPipe.png";
+        goalPipeImage = "./resources/goalPipe.png";
+        verticalPipeImage = "./resources/verticalPipe.png";
+        cornerPipeImage = "./resources/cornerPipe.png";
     }
 
-    public void setStyleSheetPath(String styleSheetPath) {
-        this.styleSheetPath = styleSheetPath;
+    @Override
+    public String getImagePath(ImageType imageType) {
+        switch (imageType) {
+            case START:
+                return startPipeImage;
+            case GOAL:
+                return goalPipeImage;
+            case VERTICAL:
+                return verticalPipeImage;
+            case CORNER:
+                return cornerPipeImage;
+        }
+        return null;
     }
 
-    public String getGameChildImagePath() {
-        return gameChildImagePath;
-    }
-
-    public void setGameChildImagePath(String gameChildImagePath) {
-        this.gameChildImagePath = gameChildImagePath;
-    }
-
-//    public String getGameChildComponentImage() {
-//        return gameChildComponentImage.get();
-//    }
-//
-//    public void setGameChildComponentImage(String gameChildComponentImage) {
-//        this.gameChildComponentImage.set(gameChildComponentImage);
-//    }
 }
