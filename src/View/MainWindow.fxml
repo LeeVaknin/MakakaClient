@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import View.BoardDisplayerControl?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.CheckMenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.layout.StackPane?>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/10.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            styleClass="main-border"
+            minWidth="0"
+            minHeight="0"
+            fx:controller="View.MainWindowController">
+   <top>
+       <MenuBar>
+           <Menu text="File">
+               <MenuItem text="Load Level" onAction="#loadLevel"/>
+               <MenuItem text="Save Level" onAction="#saveLevel"/>
+           </Menu>
+           <Menu text="Settings">
+               <MenuItem text="Server Settings" onAction="#showSettings"/>
+               <MenuItem text="Appearance" onAction="#showThemeDialog"/>
+           </Menu>
+           <Menu text="Game">
+               <CheckMenuItem text="Game Timer" onAction="#showTimer"/>
+               <CheckMenuItem text="Steps Counter" onAction="#showStepper"/>
+               <SeparatorMenuItem/>
+               <MenuItem text="Top 10"/>
+               <MenuItem text="My Game Stats"/>
+           </Menu>
+       </MenuBar>
+   </top>
+    <center>
+        <StackPane fx:id="boardStackPane"
+                   minWidth="0"
+                   minHeight="0"
+                   BorderPane.alignment="CENTER">
+                <BoardDisplayerControl fx:id="boardDisplayer"/>
+        </StackPane>
+    </center>
+</BorderPane>

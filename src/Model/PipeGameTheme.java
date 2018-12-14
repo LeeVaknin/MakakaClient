@@ -26,7 +26,11 @@ public class PipeGameTheme extends Observable implements ThemeModel {
     private String startPipeImage;
     private String goalPipeImage;
     private String verticalPipeImage;
-    private String cornerPipeImage;
+    private String horizontalPipeImage;
+    private String cornerLPipeImage;
+    private String cornerFPipeImage;
+    private String cornerJPipeImage;
+    private String corner7PipeImage;
 
 
     // Methods
@@ -34,11 +38,10 @@ public class PipeGameTheme extends Observable implements ThemeModel {
     public Task loadBackgroundMusic() {
         Task task = new Task() {
 
-            protected Object call() throws Exception {
-                int s = INDEFINITE;
+            protected Object call() {
                 AudioClip audio = new AudioClip(getClass().getResource(backgroundMusicPath).toExternalForm());
                 audio.setVolume(0.5f);
-                audio.setCycleCount(s);
+                audio.setCycleCount(INDEFINITE);
                 audio.play();
                 setChanged();
                 notifyObservers();
@@ -63,7 +66,11 @@ public class PipeGameTheme extends Observable implements ThemeModel {
         startPipeImage = "./resources/startPipe.png";
         goalPipeImage = "./resources/goalPipe.png";
         verticalPipeImage = "./resources/verticalPipe.png";
-        cornerPipeImage = "./resources/cornerPipe.png";
+        horizontalPipeImage = "./resources/horizontalPipe.png";
+        cornerLPipeImage = "./resources/LPipe.png";
+        cornerFPipeImage = "./resources/FPipe.png";
+        cornerJPipeImage = "./resources/JPipe.png";
+        corner7PipeImage = "./resources/7Pipe.png";
     }
 
     @Override
@@ -75,9 +82,18 @@ public class PipeGameTheme extends Observable implements ThemeModel {
                 return goalPipeImage;
             case VERTICAL:
                 return verticalPipeImage;
-            case CORNER:
-                return cornerPipeImage;
+            case HORIZONTAL:
+                return horizontalPipeImage;
+            case CORNERL:
+                return cornerLPipeImage;
+            case CORNERF:
+                return cornerFPipeImage;
+            case CORNERJ:
+                return cornerJPipeImage;
+            case CORNER7:
+                return corner7PipeImage;
         }
+
         return null;
     }
 
