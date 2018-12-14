@@ -2,9 +2,13 @@ package View;
 
 import Model.PipeGameTheme;
 import Model.ThemeModel;
+import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
@@ -28,7 +32,7 @@ public class BoardDisplayerControl extends Canvas {
 
     private double cellWidth;
     private double cellHeight;
-
+    private GraphicsContext gc;
     private void setCellsWidth() {
         double width = getWidth();
         double height = getHeight();
@@ -44,8 +48,9 @@ public class BoardDisplayerControl extends Canvas {
     }
 
     public BoardDisplayerControl() {
-        themeModel = new PipeGameTheme();
-        rotationMapping = new HashMap<Character, Character>() {{
+        // TODO: Move the theme to view model or DI
+        this.themeModel = new PipeGameTheme();
+        this.rotationMapping = new HashMap<Character, Character>() {{
             put('F', '7');
             put('7', 'J');
             put('J', 'L');
@@ -53,8 +58,7 @@ public class BoardDisplayerControl extends Canvas {
             put('-', '|');
             put('|', '-');
         }};
-
-        imageMap =  new HashMap<Character, String>() {{
+        this.imageMap =  new HashMap<Character, String>() {{
 
             put('F', themeModel.getImagePath(CORNERF));
             put('7', themeModel.getImagePath(CORNER7));
@@ -65,10 +69,13 @@ public class BoardDisplayerControl extends Canvas {
             put('g', themeModel.getImagePath(GOAL));
             put('s', themeModel.getImagePath(START));
         }};
+        this.gc = getGraphicsContext2D();
 
         // Redraw canvas when size changes.
         widthProperty().addListener(evt -> redraw());
         heightProperty().addListener(evt -> redraw());
+
+        addMouseClickHandler();
     }
 
     public char[][] getBoardData() {
@@ -80,32 +87,56 @@ public class BoardDisplayerControl extends Canvas {
         redraw();
     }
 
+    // Draws the whole board
     private void redraw() {
         if (boardData != null) {
             setCellsWidth();
-            GraphicsContext gc = getGraphicsContext2D();
-
-            gc.clearRect(0, 0, getWidth(), getHeight());
+            this.gc.clearRect(0, 0, getWidth(), getHeight());
 
             for (int i = 0; i < boardData.length; i++)
                 for (int j = 0; j < boardData[i].length; j++) {
                     Character pipe = boardData[i][j];
                     if (pipe != ' ') {
-                        drawSomething(boardData[i][j], new Point(j, i), gc);
+                        drawSomething(boardData[i][j], new Point(j, i));
                     }
                 }
         }
     }
 
-    private void drawSomething(Character pipeChar, Point position, GraphicsContext gc) {
+    // Draws one of the cells in our board
+    private void drawSomething(Character pipeChar, Point position) {
         try {
             String imagePath = this.imageMap.get(pipeChar);
             Image childImage = new Image(new FileInputStream(imagePath),cellWidth, cellHeight, true, true);
-            gc.drawImage(childImage, position.x * cellWidth, position.y * cellHeight, cellWidth, cellHeight);
+            this.gc.clearRect(position.x * cellWidth, position.y * cellHeight, cellWidth, cellHeight);
+            this.gc.drawImage(childImage, position.x * cellWidth, position.y * cellHeight, cellWidth, cellHeight);
 //            drawRotatedImage(gc, childImage, rotationAngle, position);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    // handles the rotations of the pipes
+    private void addMouseClickHandler(){
+        addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                double xLocation = mouseEvent.getX();
+                double yLocation = mouseEvent.getY();
+
+                int colLocation = (int) (xLocation / cellWidth);
+                int rowLocation = (int) (yLocation / cellHeight);
+
+                if (boardData.length > rowLocation && boardData[0].length > colLocation) {
+                    Character pipe = boardData[rowLocation][colLocation];
+                    if (rotationMapping.containsKey(pipe)){
+                        boardData[rowLocation][colLocation] = rotationMapping.get(pipe);
+                        drawSomething(boardData[rowLocation][colLocation], new Point(colLocation, rowLocation));
+                    }
+                }
+
+            }
+        });
     }
 
     @Override
