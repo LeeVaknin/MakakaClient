@@ -104,7 +104,6 @@ public class BoardDisplayer extends Canvas {
             Image childImage = new Image(new FileInputStream(imagePath),cellWidth, cellHeight, true, true);
             this.gc.clearRect(position.x * cellWidth, position.y * cellHeight, cellWidth, cellHeight);
             this.gc.drawImage(childImage, position.x * cellWidth, position.y * cellHeight, cellWidth, cellHeight);
-//            drawRotatedImage(gc, childImage, rotationAngle, position);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -112,24 +111,22 @@ public class BoardDisplayer extends Canvas {
 
     // handles the rotations of the pipes
     private void addMouseClickHandler(){
-        addEventFilter(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                double xLocation = mouseEvent.getX();
-                double yLocation = mouseEvent.getY();
+        addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
+            double xLocation = mouseEvent.getX();
+            double yLocation = mouseEvent.getY();
 
-                int colLocation = (int) (xLocation / cellWidth);
-                int rowLocation = (int) (yLocation / cellHeight);
+            int colLocation = (int) (xLocation / cellWidth);
+            int rowLocation = (int) (yLocation / cellHeight);
 
-                if (boardData.length > rowLocation && boardData[0].length > colLocation) {
-                    Character pipe = boardData[rowLocation][colLocation];
-                    if (rotationMapping.containsKey(pipe)){
-                        boardData[rowLocation][colLocation] = rotationMapping.get(pipe);
-                        drawSomething(boardData[rowLocation][colLocation], new Point(colLocation, rowLocation));
-                    }
+            if (boardData.length > rowLocation && boardData[0].length > colLocation) {
+                Character pipe = boardData[rowLocation][colLocation];
+                // Validate we clicked on actual pipe
+                if (rotationMapping.containsKey(pipe)){
+                    boardData[rowLocation][colLocation] = rotationMapping.get(pipe);
+                    drawSomething(boardData[rowLocation][colLocation], new Point(colLocation, rowLocation));
                 }
-
             }
+
         });
     }
 
