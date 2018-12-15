@@ -30,8 +30,6 @@ public class MainWindowController implements Initializable {
             boardDisplayer.widthProperty().bind(boardStackPane.widthProperty());
             boardDisplayer.heightProperty().bind(boardStackPane.heightProperty());
             boardDisplayer.setBoardData(boardData);
-            boardDisplayer.setOnMouseClicked(event -> {
-            });
         }
     }
 
