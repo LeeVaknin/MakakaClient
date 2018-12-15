@@ -29,7 +29,7 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.toFront();
-        stage.sizeToScene();
+        stage.setMaximized(true);
         stage.show();
     }
 

@@ -1,14 +1,13 @@
 package View;
+import View.Controls.BoardDisplayer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
-
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class MainWindowController implements Initializable {
 
@@ -20,7 +19,7 @@ public class MainWindowController implements Initializable {
             {'F','J',' ', 'g'},
     };
     @FXML
-    public BoardDisplayerControl boardDisplayer;
+    public BoardDisplayer boardDisplayer;
 
     @FXML
     public StackPane boardStackPane;
@@ -30,8 +29,6 @@ public class MainWindowController implements Initializable {
             boardDisplayer.widthProperty().bind(boardStackPane.widthProperty());
             boardDisplayer.heightProperty().bind(boardStackPane.heightProperty());
             boardDisplayer.setBoardData(boardData);
-            boardDisplayer.setOnMouseClicked(event -> {
-            });
         }
     }
 
