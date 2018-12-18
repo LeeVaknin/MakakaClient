@@ -10,6 +10,10 @@ public class PipeBoardModel extends Observable implements Serializable {
     private int StepsCounter;
     private Duration gameDuration;
 
+    public PipeBoardModel() {
+
+    }
+
     public void setBoard(String newBoard) {
         board = convertFromStringToBoard(newBoard);
         setChanged();

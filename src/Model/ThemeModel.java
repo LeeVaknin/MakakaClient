@@ -11,6 +11,7 @@ import static javafx.scene.media.AudioClip.INDEFINITE;
 
 public class ThemeModel extends Observable {
 
+    public final static String RESOURCES = "./resources/";
     public final static String STYLESHEETBASEPATH = "Styles/";
     public final static ArrayList<String> THEMES = new ArrayList<String>() {{
         add("Bright");
@@ -21,7 +22,6 @@ public class ThemeModel extends Observable {
 
     // C-TOR
     public ThemeModel(javafx.stage.Stage stage) {
-//        selectedTheme.addListener(event => {});
         this.stage = stage;
         this.selectedTheme = new SimpleStringProperty();
         // Every time the theme changes, do the following
@@ -34,6 +34,7 @@ public class ThemeModel extends Observable {
     // Variables
     private String backgroundMusicPath;
     private String styleSheetPath;
+    private String fullResoucesPath;
     private String startPipeImage;
     private String goalPipeImage;
     private String verticalPipeImage;
@@ -87,23 +88,24 @@ public class ThemeModel extends Observable {
     }
 
     public String getImagePath(ImageType imageType) {
+        fullResoucesPath = RESOURCES + this.selectedTheme.getValue() + "/";
         switch (imageType) {
             case START:
-                return  startPipeImage;
+                return  fullResoucesPath + startPipeImage;
             case GOAL:
-                return goalPipeImage;
+                return fullResoucesPath +goalPipeImage;
             case VERTICAL:
-                return verticalPipeImage;
+                return fullResoucesPath + verticalPipeImage;
             case HORIZONTAL:
-                return horizontalPipeImage;
+                return fullResoucesPath + horizontalPipeImage;
             case CORNERL:
-                return cornerLPipeImage;
+                return fullResoucesPath + cornerLPipeImage;
             case CORNERF:
-                return cornerFPipeImage;
+                return fullResoucesPath + cornerFPipeImage;
             case CORNERJ:
-                return cornerJPipeImage;
+                return fullResoucesPath + cornerJPipeImage;
             case CORNER7:
-                return corner7PipeImage;
+                return fullResoucesPath + corner7PipeImage;
         }
 
         return null;

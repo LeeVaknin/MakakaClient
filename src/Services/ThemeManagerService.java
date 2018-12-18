@@ -17,16 +17,18 @@ public class ThemeManagerService extends Observable implements Observer {
         this.currentTheme = new ThemeModel(stage);
         themeName = new SimpleStringProperty();
         themeName.bindBidirectional(this.currentTheme.selectedTheme);
+        this.currentTheme.addObserver(this);
         setChanged();
         notifyObservers();
     }
 
-    public void ChangeTheme(String newTheme) {
-        this.currentTheme.SwitchTheme(newTheme);
+    public ThemeModel getTheme() {
+        return this.currentTheme;
     }
 
     @Override
     public void update(Observable o, Object arg) {
-
+        setChanged();
+        notifyObservers();
     }
 }

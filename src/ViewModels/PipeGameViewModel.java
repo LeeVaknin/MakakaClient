@@ -25,10 +25,14 @@ public class PipeGameViewModel extends Observable implements Observer {
                 {'F','J',' ', 'g'},
         };
         currentBoard.setBoard(boardData);
+        currentBoard.addObserver(this);
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        if (o == this.currentBoard) {
+            System.out.println("The board has changed and the Pipe game view model knows about it");
+        }
 
     }
 }

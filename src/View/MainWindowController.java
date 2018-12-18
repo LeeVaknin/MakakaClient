@@ -1,29 +1,34 @@
-package View.MainWindow;
+package View;
+
 import Services.ThemeManagerService;
+import Utils.DIHelper;
 import ViewModels.MainWindowViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
-
 import java.io.*;
 import java.net.URL;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
 
-public class MainWindowController implements Observer,  Initializable {
+public class MainWindowController implements Observer, Initializable {
 
-    MainWindowViewModel vm;
-    ThemeManagerService themeManager;
-
+    // Variables
+    private MainWindowViewModel vm;
+    private ThemeManagerService themeManager;
     private StringProperty theme;
 
-    // DI for poor
+    // C-TORs and overrides
     public MainWindowController(ThemeManagerService themeManagerService, MainWindowViewModel mainWindowViewModel) {
 
         // Set the themeManager service and bind the theme type to it
@@ -33,12 +38,41 @@ public class MainWindowController implements Observer,  Initializable {
         // Set the vm and bind the logged in user to the vm
         this.vm = mainWindowViewModel;
         this.vm.addObserver(this);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            URL resource = getClass().getResource("PipeGame.fxml");
+            FXMLLoader fxmlLoader = new FXMLLoader(resource);
+            DIHelper.injectServiceAndVM(fxmlLoader, "PipeGameViewModel", themeManager);
+            StackPane gameBoard = fxmlLoader.load();
+            rootBorder.centerProperty().setValue(gameBoard);
+
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    @FXML protected TextField userName;
+    @Override
+    public void update (java.util.Observable o, Object arg){
+        if (o == this.themeManager) {
+            theme = new SimpleStringProperty();
+            theme.bindBidirectional(this.themeManager.themeName);
+            themeToggle.textProperty().bindBidirectional(theme);
 
+        }
+        if (o == this.vm){
+            this.vm.userName.bindBidirectional(userName.textProperty());
+        }
+
+    }
+
+    // FXMl variables
+    @FXML protected TextField userName;
     @FXML protected Button themeToggle;
+    @FXML protected  BorderPane rootBorder;
 
     @FXML protected void handleToggleAction(ActionEvent t) {
         if (theme.getValue().equals("Dark")) {
@@ -47,15 +81,6 @@ public class MainWindowController implements Observer,  Initializable {
         else {
             theme.setValue("Dark");
         }
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
-    public void start() {
-        System.out.println("Starting our pipe game");
     }
 
     @FXML
@@ -91,7 +116,7 @@ public class MainWindowController implements Observer,  Initializable {
 //            try {
 //                objInput = new ObjectInputStream(new FileInputStream(chosen));
 //                PipeBoardModel savedBoard = (PipeBoardModel) objInput.readObject();
-//                boardDisplayer.setBoardData(savedBoard.getBoard());
+//                boardDisplayer.setBoard(savedBoard.getBoard());
 //
 //            } catch (IOException | ClassNotFoundException e) {
 //                e.printStackTrace();
@@ -121,19 +146,7 @@ public class MainWindowController implements Observer,  Initializable {
 //            }
         }
 
-    @Override
-    public void update (java.util.Observable o, Object arg){
-        if (o == this.themeManager) {
-            theme = new SimpleStringProperty();
-            theme.bindBidirectional(this.themeManager.themeName);
-            themeToggle.textProperty().bindBidirectional(theme);
 
-        }
-        if (o == this.vm){
-            this.vm.userName.bindBidirectional(userName.textProperty());
-        }
-
-    }
 
     private File SelectFile() {
         FileChooser fileChooser = new FileChooser();
@@ -144,6 +157,7 @@ public class MainWindowController implements Observer,  Initializable {
         }
         return selectedFile;
     }
+
 
 }
 

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import View.BoardDisplayer?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="View.PipeGameController"
+            fx:id="stackPane"
+            minWidth="0"
+            minHeight="0">
+        <BoardDisplayer fx:id="boardDisplayer"/>
+</StackPane>

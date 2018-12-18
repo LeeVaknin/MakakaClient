@@ -1,5 +1,6 @@
-package View.PipeGame;
+package View;
 
+import Model.PipeBoardModel;
 import Model.ThemeModel;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,13 +15,13 @@ import static Model.ImageType.*;
 
 public class BoardDisplayer extends Canvas {
 
-    private char[][] boardData;
-
+    private PipeBoardModel board;
     private ThemeModel themeModel;
+
 //    Mappings
 
     private final HashMap<Character, Character> rotationMapping;
-    private final HashMap<Character, String> imageMap;
+    private HashMap<Character, String> imageMap;
 
     private double cellWidth;
     private double cellHeight;
@@ -28,9 +29,13 @@ public class BoardDisplayer extends Canvas {
 
     private Point boardStartPosition;
 
+    // Setters
+
     private void setCellsWidth() {
         double width = getWidth();
         double height = getHeight();
+
+        char[][] boardData = board.getBoard();
         cellWidth = width / boardData[0].length;
         cellHeight = height / boardData.length;
         boardStartPosition = new Point();
@@ -48,16 +53,8 @@ public class BoardDisplayer extends Canvas {
         }
     }
 
-    public BoardDisplayer() {
-
-        this.rotationMapping = new HashMap<Character, Character>() {{
-            put('F', '7');
-            put('7', 'J');
-            put('J', 'L');
-            put('L', 'F');
-            put('-', '|');
-            put('|', '-');
-        }};
+    public void setThemeModel(ThemeModel themeModel) {
+        this.themeModel = themeModel;
         this.imageMap =  new HashMap<Character, String>() {{
 
             put('F', themeModel.getImagePath(CORNERF));
@@ -69,8 +66,20 @@ public class BoardDisplayer extends Canvas {
             put('g', themeModel.getImagePath(GOAL));
             put('s', themeModel.getImagePath(START));
         }};
-        this.gc = getGraphicsContext2D();
+        this.redraw();
+    }
 
+    public BoardDisplayer() {
+
+        this.rotationMapping = new HashMap<Character, Character>() {{
+            put('F', '7');
+            put('7', 'J');
+            put('J', 'L');
+            put('L', 'F');
+            put('-', '|');
+            put('|', '-');
+        }};
+        this.gc = getGraphicsContext2D();
         // Redraw canvas when size changes.
         widthProperty().addListener(evt -> redraw());
         heightProperty().addListener(evt -> redraw());
@@ -78,23 +87,27 @@ public class BoardDisplayer extends Canvas {
         addMouseClickHandler();
     }
 
-    public char[][] getBoardData() {
-        return boardData;
+    public PipeBoardModel getBoard() {
+        return board;
     }
 
-    public void setBoardData(char[][] boardData) {
-        this.boardData = boardData;
-        redraw();
+    public void setBoard(PipeBoardModel board) {
+        this.board = board;
+        if (themeModel != null) {
+            redraw();
+        }
     }
 
     // Draws the whole board
     private void redraw() {
-        if (boardData != null) {
+        if (board != null) {
             setCellsWidth();
+            if (cellWidth == 0 || cellHeight == 0) { return;}
             this.gc.clearRect(0, 0, getWidth(), getHeight());
 
+            char[][] boardData = board.getBoard();
             for (int i = 0; i < boardData.length; i++)
-                for (int j = 0; j < boardData[i].length; j++) {
+                for (int j = 0; j < boardData[0].length; j++) {
                     Character pipe = boardData[i][j];
                     if (pipe != ' ') {
                         drawSomething(boardData[i][j], new Point(j, i));
@@ -120,18 +133,20 @@ public class BoardDisplayer extends Canvas {
     // handles the rotations of the pipes
     private void addMouseClickHandler(){
         addEventFilter(MouseEvent.MOUSE_PRESSED, mouseEvent -> {
-            double xLocation = mouseEvent.getX();
-            double yLocation = mouseEvent.getY();
+            double xLocation = mouseEvent.getX() - this.boardStartPosition.x;
+            double yLocation = mouseEvent.getY() - this.boardStartPosition.y;
 
-            int colLocation = (int) (xLocation / cellWidth);
-            int rowLocation = (int) (yLocation / cellHeight);
+            if (xLocation < 0 || yLocation < 0) {return;}
+            int colLocation = (int) ((xLocation) / cellWidth);
+            int rowLocation = (int) ((yLocation)/ cellHeight);
 
-            if (boardData.length > rowLocation && boardData[0].length > colLocation) {
-                Character pipe = boardData[rowLocation][colLocation];
+            if (board.getBoard().length > rowLocation && board.getBoard()[0].length > colLocation) {
+                Character pipe = board.getBoard()[rowLocation][colLocation];
                 // Validate we clicked on actual pipe
                 if (rotationMapping.containsKey(pipe)){
-                    boardData[rowLocation][colLocation] = rotationMapping.get(pipe);
-                    drawSomething(boardData[rowLocation][colLocation], new Point(colLocation, rowLocation));
+                    board.getBoard()[rowLocation][colLocation] = rotationMapping.get(pipe);
+                    board.notifyObservers(board);
+                    drawSomething(board.getBoard()[rowLocation][colLocation], new Point(colLocation, rowLocation));
                 }
             }
 
@@ -152,6 +167,7 @@ public class BoardDisplayer extends Canvas {
     public double prefHeight(double width) {
         return getHeight();
     }
+
 
 }
 

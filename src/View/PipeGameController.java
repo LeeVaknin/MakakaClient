@@ -1,9 +1,12 @@
-package View.PipeGame;
+package View;
+
 import Services.ThemeManagerService;
 import ViewModels.PipeGameViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
+
 import java.net.URL;
 import java.util.Observable;
 import java.util.Observer;
@@ -11,15 +14,15 @@ import java.util.ResourceBundle;
 
 public class PipeGameController extends Observable implements Initializable, Observer {
 
-    // attributes
-    PipeGameViewModel vm;
-    ThemeManagerService themeManager;
+    // Variables
+    private PipeGameViewModel vm;
+    private ThemeManagerService themeManager;
 
     @FXML
     public BoardDisplayer boardDisplayer;
 
     @FXML
-    public AnchorPane rootPane;
+    public StackPane stackPane;
 
     // C-TOR
     public PipeGameController(ThemeManagerService themeManager, PipeGameViewModel vm) {
@@ -28,22 +31,26 @@ public class PipeGameController extends Observable implements Initializable, Obs
         this.vm.addObserver(this);
 
         this.themeManager = themeManager;
-        addObserver(this.themeManager);
+        this.themeManager.addObserver(this);
     }
 
     // Implementations
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (boardDisplayer != null) {
-            boardDisplayer.widthProperty().bind(rootPane.widthProperty());
-            boardDisplayer.heightProperty().bind(rootPane.heightProperty());
-            boardDisplayer.setBoardData(vm.currentBoard.getBoard());
+            boardDisplayer.widthProperty().bind(stackPane.widthProperty());
+            boardDisplayer.heightProperty().bind(stackPane.heightProperty());
+            boardDisplayer.setBoard(vm.currentBoard);
         }
     }
 
     @Override
     public void update(Observable o, Object arg) {
-
+        if (o == this.themeManager) {
+            boardDisplayer.setThemeModel(this.themeManager.getTheme());
+        }
+        if (o == this.vm) {
+            boardDisplayer.setBoard(vm.currentBoard);
+        }
     }
 }
