@@ -2,18 +2,18 @@
 * {
     /* Menu itself */
 
-    -fx-my-menu-color: #102d53;
-    -fx-my-menu-color-highlighted: #e7f0fb;
+    -fx-my-menu-color: #3d8cf8;
+    -fx-my-menu-color-highlighted: #ffffff;
 
     /* Font */
-    -fx-my-menu-font-color: #f8fafd;
-    -fx-my-menu-font-color-highlighted: #71788e;
-    -fx-my-popup-font-color: #71788e;
+    -fx-my-menu-font-color: #ffffff;
+    -fx-my-menu-font-color-highlighted: #102d53;
+    -fx-my-popup-font-color: #102d53;
     -fx-my-popup-font-color-highlighted: #ffffff;
 
    /* popupMenu */
-   -fx-my-popup-color: #e7f0fb;
-   -fx-my-popup-color-highlighted: #102d53;
+   -fx-my-popup-color: #ffffff;
+   -fx-my-popup-color-highlighted:  #3d8cf8;
 }
 
 /* MENU BAR + Top-level MENU BUTTONS */

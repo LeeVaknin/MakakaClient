@@ -38,12 +38,12 @@
                </Menu>
            </MenuBar>
            <TextField fx:id="userName"
-                      styleClass="basic-text-field"
+                      styleClass="text-field"
                       promptText="Nickname"/>
            <Button fx:id="themeToggle"
-                          mnemonicParsing="false"
-                          styleClass="main-button"
-                          onAction="#handleToggleAction" />
+                   mnemonicParsing="false"
+                   styleClass="main-button"
+                   onAction="#handleToggleAction" />
        </HBox>
    </top>
     <center>

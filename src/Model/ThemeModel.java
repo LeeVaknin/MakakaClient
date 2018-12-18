@@ -66,6 +66,7 @@ public class ThemeModel extends Observable {
 
     public void loadStyleSheet() {
         this.styleSheetPath = STYLESHEETBASEPATH + selectedTheme.getValue();
+        if (this.stage.getScene().getStylesheets().size() > 0) this.stage.getScene().getStylesheets().clear();
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/menuBar.css");
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/mainStyles.css");
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/textField.css");
