@@ -1,8 +1,7 @@
-package View;
+package View.PipeGame;
 
-import Model.PipeGameTheme;
+import ViewModels.ThemeManagerViewModel;
 import Model.ThemeModel;
-import javafx.event.EventHandler;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -11,14 +10,14 @@ import java.awt.*;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-
 import static Model.ImageType.*;
+
 
 public class BoardDisplayer extends Canvas {
 
     private char[][] boardData;
-    private ThemeModel themeModel;
 
+    private ThemeModel themeModel;
 //    Mappings
 
     private final HashMap<Character, Character> rotationMapping;
@@ -27,23 +26,31 @@ public class BoardDisplayer extends Canvas {
     private double cellWidth;
     private double cellHeight;
     private GraphicsContext gc;
+
+    private Point boardStartPosition;
+
     private void setCellsWidth() {
         double width = getWidth();
         double height = getHeight();
         cellWidth = width / boardData[0].length;
         cellHeight = height / boardData.length;
-
+        boardStartPosition = new Point();
         // In case the width and the height are not symmetric, make it so
         if (cellWidth > cellHeight) {
+            double diff = cellWidth - cellHeight;
+            // Shift the board to the right according to the size of the board and the window
+            boardStartPosition.x = (int)(diff * boardData[0].length) / 2;
             cellWidth = cellHeight;
         } else {
+            double diff = cellHeight - cellWidth;
+            // Shift the board to the bottom according to the size of the board and the window
+            boardStartPosition.y = (int)(diff * boardData.length) / 2;
             cellHeight = cellWidth;
         }
     }
 
     public BoardDisplayer() {
-        // TODO: Move the theme to view model or DI
-        this.themeModel = new PipeGameTheme();
+
         this.rotationMapping = new HashMap<Character, Character>() {{
             put('F', '7');
             put('7', 'J');
@@ -102,8 +109,10 @@ public class BoardDisplayer extends Canvas {
         try {
             String imagePath = this.imageMap.get(pipeChar);
             Image childImage = new Image(new FileInputStream(imagePath),cellWidth, cellHeight, true, true);
-            this.gc.clearRect(position.x * cellWidth, position.y * cellHeight, cellWidth, cellHeight);
-            this.gc.drawImage(childImage, position.x * cellWidth, position.y * cellHeight, cellWidth, cellHeight);
+            this.gc.clearRect(position.x * cellWidth + boardStartPosition.x,
+                    position.y * cellHeight + boardStartPosition.y, cellWidth, cellHeight);
+            this.gc.drawImage(childImage, position.x * cellWidth + boardStartPosition.x,
+                    boardStartPosition.y +  position.y * cellHeight, cellWidth, cellHeight);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

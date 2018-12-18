@@ -1,6 +1,8 @@
 package Model;
 
-public class User {
+import java.util.Observable;
+
+public class User extends Observable {
 
     private int Id;
     private String Nickname;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.scene.layout.BorderPane?>
-<?import View.BoardDisplayer?>
+<?import View.PipeGame.BoardDisplayer?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
@@ -9,12 +9,13 @@
 <?import javafx.scene.layout.StackPane?>
 
 
+<?import javafx.scene.control.Button?>
 <BorderPane xmlns="http://javafx.com/javafx/10.0.1"
             xmlns:fx="http://javafx.com/fxml/1"
             styleClass="main-border"
             minWidth="0"
             minHeight="0"
-            fx:controller="View.MainWindowController">
+            fx:controller="View.MainWindow.MainWindowController">
    <top>
        <MenuBar>
            <Menu text="File">
@@ -26,7 +27,7 @@
                <MenuItem text="Appearance" onAction="#showThemeDialog"/>
            </Menu>
            <Menu text="Game">
-               <CheckMenuItem text="Game Timer" onAction="#showTimer"/>
+               <CheckMenuItem text="Game View.Timer" onAction="#showTimer"/>
                <CheckMenuItem text="Steps Counter" onAction="#showStepper"/>
                <SeparatorMenuItem/>
                <MenuItem text="Top 10"/>
@@ -41,5 +42,6 @@
                    BorderPane.alignment="CENTER">
                 <BoardDisplayer fx:id="boardDisplayer"/>
         </StackPane>
+        <!--<Button onAction="#done" text="Submit Level"></Button>-->
     </center>
 </BorderPane>
