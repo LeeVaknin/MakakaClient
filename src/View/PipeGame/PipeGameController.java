@@ -1,18 +1,19 @@
 package View.PipeGame;
-import Services.ThemeManager;
+import Services.ThemeManagerService;
 import ViewModels.PipeGameViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
 import java.net.URL;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
-public class PipeGameController extends Observable implements Initializable {
+public class PipeGameController extends Observable implements Initializable, Observer {
 
     // attributes
     PipeGameViewModel vm;
-    ThemeManager themeManager;
+    ThemeManagerService themeManager;
 
     @FXML
     public BoardDisplayer boardDisplayer;
@@ -21,8 +22,11 @@ public class PipeGameController extends Observable implements Initializable {
     public AnchorPane rootPane;
 
     // C-TOR
-    public PipeGameController(ThemeManager themeManager, PipeGameViewModel vm) {
+    public PipeGameController(ThemeManagerService themeManager, PipeGameViewModel vm) {
+
         this.vm = vm;
+        this.vm.addObserver(this);
+
         this.themeManager = themeManager;
         addObserver(this.themeManager);
     }
@@ -36,5 +40,10 @@ public class PipeGameController extends Observable implements Initializable {
             boardDisplayer.heightProperty().bind(rootPane.heightProperty());
             boardDisplayer.setBoardData(vm.currentBoard.getBoard());
         }
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

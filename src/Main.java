@@ -1,8 +1,4 @@
-import Services.ThemeManager;
 import Services.ThemeManagerService;
-import View.MainWindow.MainWindowController;
-import ViewModels.PipeGameViewModel;
-import ViewModels.ThemeManagerViewModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;

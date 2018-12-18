@@ -1,5 +1,4 @@
 package View.MainWindow;
-import Services.ThemeManager;
 import Services.ThemeManagerService;
 import ViewModels.MainWindowViewModel;
 import javafx.beans.property.SimpleStringProperty;
@@ -9,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.stage.FileChooser;
 
 import java.io.*;

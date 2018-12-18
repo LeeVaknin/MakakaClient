@@ -16,7 +16,6 @@ public class PipeGameViewModel extends Observable implements Observer {
 
     // C-TOR
     public PipeGameViewModel() {
-
         currentBoard = new PipeBoardModel();
         char[][] boardData = {
                 {'s','7','-', 'L'},
@@ -27,8 +26,10 @@ public class PipeGameViewModel extends Observable implements Observer {
         };
         currentBoard.setBoard(boardData);
     }
+
     @Override
     public void update(Observable o, Object arg) {
+
     }
 }
 

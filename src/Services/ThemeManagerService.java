@@ -7,7 +7,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class ThemeManagerService extends Observable implements ThemeManager, Observer {
+public class ThemeManagerService extends Observable implements Observer {
 
     // TODO: Turn this service into a singleTon
     private ThemeModel currentTheme;
