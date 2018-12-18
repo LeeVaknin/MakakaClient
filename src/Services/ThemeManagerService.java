@@ -1,17 +1,20 @@
 package Services;
-
 import Model.ThemeModel;
 import javafx.stage.Stage;
-
 import java.util.Observable;
+import java.util.Observer;
 
-public class ThemeManagerService extends Observable implements ThemeManager {
+
+public class ThemeManagerService extends Observable implements ThemeManager, Observer {
 
     // TODO: Turn this service into a singleTon
     private ThemeModel currentTheme;
     private Stage currentstage;
 
-    public ThemeManagerService(Stage stage) {
+    public ThemeManagerService() {
+    }
+
+    public void initializeThemeManager(Stage stage) {
         this.currentstage = stage;
         this.currentTheme = new ThemeModel(stage);
     }

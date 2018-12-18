@@ -27,8 +27,7 @@ public class ThemeModel extends Observable {
         selectedTheme.addListener(event -> {
             this.setTheme();
         });
-        SwitchTheme("DARK");
-
+        SwitchTheme("Dark");
     }
 
     // Variables
@@ -65,7 +64,7 @@ public class ThemeModel extends Observable {
     }
 
     public void loadStyleSheet() {
-        this.styleSheetPath = STYLESHEETBASEPATH + selectedTheme;
+        this.styleSheetPath = STYLESHEETBASEPATH + selectedTheme.getValue();
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/menuBar.css");
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/mainStyles.css");
         setChanged();
@@ -109,16 +108,14 @@ public class ThemeModel extends Observable {
     public void SwitchTheme(String newThemeName){
         if (THEMES.contains(newThemeName)) {
             selectedTheme.setValue(newThemeName);
-            setChanged();
-            notifyObservers(newThemeName);
         }
     }
 
     public void setTheme() {
         if (this.stage.getScene() != null) {
+            this.loadStyleSheet();
             this.loadBackgroundMusic();
             this.loadGameChildImages();
-            this.loadStyleSheet();
         }
     }
 }

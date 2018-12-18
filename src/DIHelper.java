@@ -6,8 +6,9 @@ import java.lang.reflect.Constructor;
 
 public class DIHelper {
 
-    public static void injectServiceAndVM(FXMLLoader loader, String VMName, Stage stage) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        ThemeManager service = new ThemeManagerService(stage);
+    public static void injectServiceAndVM(FXMLLoader loader, String VMName, Object service) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+
+
         // Get VM name and inject it with the themes service into the given loader view
         String fullClassName = "ViewModels." +  VMName;
         Class vmClassType = Class.forName(fullClassName);
@@ -21,7 +22,7 @@ public class DIHelper {
                             return type.newInstance();
                         case 1:{
                             // in case we want only the service
-                            if (c.getParameterTypes()[0] == ThemeManagerService.class) {
+                            if (c.getParameterTypes()[0] == service.getClass()) {
                                 return c.newInstance(service);
                             }
                             // in case we want only the vm
@@ -31,7 +32,7 @@ public class DIHelper {
                         }
                         case 2:
                         {
-                            if (c.getParameterTypes()[0]==ThemeManagerService.class && c.getParameterTypes()[1]==vmClassType) {
+                            if (c.getParameterTypes()[0]==service.getClass() && c.getParameterTypes()[1]==vmClassType) {
                                 return c.newInstance(service, vm);
                             }
                         }

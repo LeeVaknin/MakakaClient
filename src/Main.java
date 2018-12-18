@@ -1,5 +1,8 @@
+import Services.ThemeManager;
+import Services.ThemeManagerService;
 import View.MainWindow.MainWindowController;
 import ViewModels.PipeGameViewModel;
+import ViewModels.ThemeManagerViewModel;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -22,15 +25,20 @@ public class Main extends Application {
         SetDesiredSceneSized();
 
         // Load resource and inject the themes service
+        ThemeManagerService service = new ThemeManagerService();
         URL resource = getClass().getResource("View/MainWindow/MainWindow.fxml");
+
         FXMLLoader fxmlLoader = new FXMLLoader(resource);
-        DIHelper.injectServiceAndVM(fxmlLoader, "MainWindowViewModel", stage);
+
+        DIHelper.injectServiceAndVM(fxmlLoader, "MainWindowViewModel", service);
         BorderPane root = fxmlLoader.load();
         Scene scene = new Scene(root, desiredSceneWidth, desiredSceneHeight, Color.TRANSPARENT);
 
         stage.setScene(scene);
         stage.toFront();
         stage.setMaximized(true);
+
+        service.initializeThemeManager(stage);
         stage.show();
     }
 
