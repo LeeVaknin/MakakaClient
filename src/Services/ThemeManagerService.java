@@ -1,5 +1,7 @@
 package Services;
 import Model.ThemeModel;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.stage.Stage;
 import java.util.Observable;
 import java.util.Observer;
@@ -9,20 +11,18 @@ public class ThemeManagerService extends Observable implements ThemeManager, Obs
 
     // TODO: Turn this service into a singleTon
     private ThemeModel currentTheme;
-    private Stage currentstage;
-
-    public ThemeManagerService() {
-    }
+    public StringProperty themeName;
 
     public void initializeThemeManager(Stage stage) {
-        this.currentstage = stage;
         this.currentTheme = new ThemeModel(stage);
+        themeName = new SimpleStringProperty();
+        themeName.bindBidirectional(this.currentTheme.selectedTheme);
+        setChanged();
+        notifyObservers();
     }
 
     public void ChangeTheme(String newTheme) {
         this.currentTheme.SwitchTheme(newTheme);
-        setChanged();
-        notifyObservers();
     }
 
     @Override

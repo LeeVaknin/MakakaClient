@@ -16,6 +16,7 @@ public class ThemeModel extends Observable {
         add("Bright");
         add("Dark");
     }};
+
     private javafx.stage.Stage stage;
 
     // C-TOR
@@ -41,7 +42,7 @@ public class ThemeModel extends Observable {
     private String cornerFPipeImage;
     private String cornerJPipeImage;
     private String corner7PipeImage;
-    private StringProperty selectedTheme;
+    public StringProperty selectedTheme;
 
     // Methods
     public Task loadBackgroundMusic() {
@@ -67,6 +68,8 @@ public class ThemeModel extends Observable {
         this.styleSheetPath = STYLESHEETBASEPATH + selectedTheme.getValue();
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/menuBar.css");
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/mainStyles.css");
+        this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/textField.css");
+        this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/button.css");
         setChanged();
         notifyObservers();
     }

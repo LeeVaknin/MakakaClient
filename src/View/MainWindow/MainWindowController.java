@@ -2,8 +2,14 @@ package View.MainWindow;
 import Services.ThemeManager;
 import Services.ThemeManagerService;
 import ViewModels.MainWindowViewModel;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.stage.FileChooser;
 
 import java.io.*;
@@ -17,10 +23,32 @@ public class MainWindowController implements Observer,  Initializable {
     MainWindowViewModel vm;
     ThemeManagerService themeManager;
 
+    private StringProperty theme;
+
     // DI for poor
     public MainWindowController(ThemeManagerService themeManagerService, MainWindowViewModel mainWindowViewModel) {
-        themeManager = themeManagerService;
-        vm = mainWindowViewModel;
+
+        // Set the themeManager service and bind the theme type to it
+        this.themeManager = themeManagerService;
+        this.themeManager.addObserver(this);
+
+        // Set the vm and bind the logged in user to the vm
+        this.vm = mainWindowViewModel;
+        this.vm.addObserver(this);
+
+    }
+
+    @FXML protected TextField userName;
+
+    @FXML protected Button themeToggle;
+
+    @FXML protected void handleToggleAction(ActionEvent t) {
+        if (theme.getValue().equals("Dark")) {
+            theme.setValue("Bright");
+        }
+        else {
+            theme.setValue("Dark");
+        }
     }
 
     @Override
@@ -97,6 +125,15 @@ public class MainWindowController implements Observer,  Initializable {
 
     @Override
     public void update (java.util.Observable o, Object arg){
+        if (o == this.themeManager) {
+            theme = new SimpleStringProperty();
+            theme.bindBidirectional(this.themeManager.themeName);
+            themeToggle.textProperty().bindBidirectional(theme);
+
+        }
+        if (o == this.vm){
+            this.vm.userName.bindBidirectional(userName.textProperty());
+        }
 
     }
 

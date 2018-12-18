@@ -2,3 +2,11 @@
 .main-border {
     -fx-background-color:#1c2033;
 }
+
+.main-menu {
+    -fx-background-color: -fx-my-menu-color;
+}
+
+.main-label {
+    -fx-text-fill:  #f8fafd;
+}

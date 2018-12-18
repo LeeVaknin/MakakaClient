@@ -1,7 +1,4 @@
-import Services.ThemeManager;
-import Services.ThemeManagerService;
 import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
 import java.lang.reflect.Constructor;
 
 public class DIHelper {
