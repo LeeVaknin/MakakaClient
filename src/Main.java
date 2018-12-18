@@ -18,21 +18,15 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        URL a = getClass().getResource("View/MainWindow/MainWindow.fxml");
-//        stage.initStyle(StageStyle.DECORATED);
-
+        //Size
         SetDesiredSceneSized();
 
-//        scene.getStylesheets().add("Styles/Dark/menuBar.css");
-//        scene.getStylesheets().add("Styles/Dark/mainStyles.css");
-        PipeGameViewModel vm = new PipeGameViewModel(scene);
-        FXMLLoader fxl = new FXMLLoader();
-        BorderPane root = fxl.load(getClass().getResource("MainWindow.fxml").openStream());
-        MainWindowController mwc=fxl.getController(); // View
-        mwc.setViewModel(vm);
-        vm.addObserver(mwc);
-
-        Scene scene = new Scene(root,desiredSceneWidth, desiredSceneHeight, Color.TRANSPARENT);
+        // Load resource and inject the themes service
+        URL resource = getClass().getResource("View/MainWindow/MainWindow.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(resource);
+        DIHelper.injectServiceAndVM(fxmlLoader, "MainWindowViewModel", stage);
+        BorderPane root = fxmlLoader.load();
+        Scene scene = new Scene(root, desiredSceneWidth, desiredSceneHeight, Color.TRANSPARENT);
 
         stage.setScene(scene);
         stage.toFront();

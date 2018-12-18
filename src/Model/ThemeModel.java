@@ -1,17 +1,13 @@
 package Model;
 
-import com.sun.javafx.css.Stylesheet;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
-import javafx.scene.Scene;
 import javafx.scene.media.AudioClip;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Observable;
-
 import static javafx.scene.media.AudioClip.INDEFINITE;
+
 
 public class ThemeModel extends Observable {
 
@@ -20,19 +16,19 @@ public class ThemeModel extends Observable {
         add("Bright");
         add("Dark");
     }};
-    private Scene scene;
+    private javafx.stage.Stage stage;
 
     // C-TOR
-    public ThemeModel(Scene scene) {
+    public ThemeModel(javafx.stage.Stage stage) {
 //        selectedTheme.addListener(event => {});
-        this.scene = scene;
+        this.stage = stage;
+        this.selectedTheme = new SimpleStringProperty();
         // Every time the theme changes, do the following
         selectedTheme.addListener(event -> {
-            this.loadBackgroundMusic();
-            this.loadGameChildImages();
-            this.loadStyleSheet();
+            this.setTheme();
         });
         SwitchTheme("DARK");
+
     }
 
     // Variables
@@ -70,8 +66,8 @@ public class ThemeModel extends Observable {
 
     public void loadStyleSheet() {
         this.styleSheetPath = STYLESHEETBASEPATH + selectedTheme;
-        this.scene.getStylesheets().add(this.styleSheetPath + "/menuBar.css");
-        this.scene.getStylesheets().add(this.styleSheetPath + "/mainStyles.css");
+        this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/menuBar.css");
+        this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/mainStyles.css");
         setChanged();
         notifyObservers();
     }
@@ -115,6 +111,14 @@ public class ThemeModel extends Observable {
             selectedTheme.setValue(newThemeName);
             setChanged();
             notifyObservers(newThemeName);
+        }
+    }
+
+    public void setTheme() {
+        if (this.stage.getScene() != null) {
+            this.loadBackgroundMusic();
+            this.loadGameChildImages();
+            this.loadStyleSheet();
         }
     }
 }

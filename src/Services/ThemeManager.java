@@ -1,4 +1,6 @@
 package Services;
 
-public interface ThemeManager {
+import java.util.Observer;
+
+public interface ThemeManager extends Observer {
 }
