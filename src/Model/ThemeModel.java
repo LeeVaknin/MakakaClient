@@ -2,10 +2,14 @@ package Model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.concurrent.Task;
+import javafx.stage.Stage;
 import javafx.scene.media.AudioClip;
+
+import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Observable;
+
 import static javafx.scene.media.AudioClip.INDEFINITE;
 
 
@@ -18,10 +22,10 @@ public class ThemeModel extends Observable {
         add("Dark");
     }};
 
-    private javafx.stage.Stage stage;
+    private Stage stage;
 
     // C-TOR
-    public ThemeModel(javafx.stage.Stage stage) {
+    public ThemeModel(Stage stage) {
         this.stage = stage;
         this.selectedTheme = new SimpleStringProperty();
         // Every time the theme changes, do the following
@@ -32,6 +36,9 @@ public class ThemeModel extends Observable {
     }
 
     // Variables
+    private String projectRoot = System.getProperty("user.dir");
+    private int counter = 0;
+    private AudioClip audio;
     private String backgroundMusicPath;
     private String styleSheetPath;
     private String fullResoucesPath;
@@ -46,24 +53,16 @@ public class ThemeModel extends Observable {
     public StringProperty selectedTheme;
 
     // Methods
-    public Task loadBackgroundMusic() {
-        Task task = new Task() {
-
-            protected Object call() {
-                AudioClip audio = new AudioClip(getClass().getResource(backgroundMusicPath).toExternalForm());
-                audio.setVolume(0.5f);
-                audio.setCycleCount(INDEFINITE);
-                audio.play();
-                setChanged();
-                notifyObservers();
-                return null;
-            }
-        };
-
-        Thread thread = new Thread(task);
-        thread.start();
-        return task;
+    public void loadBackgroundMusic() {
+        if (counter == 1)
+            audio.stop();
+        this.backgroundMusicPath = projectRoot + "/src/" + STYLESHEETBASEPATH + selectedTheme.getValue() + "/song.wav";
+        audio = new AudioClip(Paths.get(backgroundMusicPath).toUri().toString());
+        audio.setCycleCount(INDEFINITE);
+        audio.play();
+        counter = 1;
     }
+
 
     public void loadStyleSheet() {
         this.styleSheetPath = STYLESHEETBASEPATH + selectedTheme.getValue();
@@ -91,9 +90,9 @@ public class ThemeModel extends Observable {
         fullResoucesPath = RESOURCES + this.selectedTheme.getValue() + "/";
         switch (imageType) {
             case START:
-                return  fullResoucesPath + startPipeImage;
+                return fullResoucesPath + startPipeImage;
             case GOAL:
-                return fullResoucesPath +goalPipeImage;
+                return fullResoucesPath + goalPipeImage;
             case VERTICAL:
                 return fullResoucesPath + verticalPipeImage;
             case HORIZONTAL:
@@ -110,8 +109,8 @@ public class ThemeModel extends Observable {
 
         return null;
     }
-    
-    public void SwitchTheme(String newThemeName){
+
+    public void SwitchTheme(String newThemeName) {
         if (THEMES.contains(newThemeName)) {
             selectedTheme.setValue(newThemeName);
         }
