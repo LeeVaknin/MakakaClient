@@ -145,7 +145,6 @@ public class BoardDisplayer extends Canvas {
                 // Validate we clicked on actual pipe
                 if (rotationMapping.containsKey(pipe)){
                     board.getBoard()[rowLocation][colLocation] = rotationMapping.get(pipe);
-                    board.notifyObservers(board);
                     drawSomething(board.getBoard()[rowLocation][colLocation], new Point(colLocation, rowLocation));
                 }
             }

@@ -26,9 +26,9 @@ public class Main extends Application {
         URL resource = getClass().getResource("View/MainWindow.fxml");
 
         FXMLLoader fxmlLoader = new FXMLLoader(resource);
-
-        DIHelper.injectServiceAndVM(fxmlLoader, "MainWindowViewModel", service);
+        DIHelper.injectServiceAndVM(fxmlLoader, "MainWindowViewModel", new Object[] { service });
         BorderPane root = fxmlLoader.load();
+
         Scene scene = new Scene(root, desiredSceneWidth, desiredSceneHeight, Color.TRANSPARENT);
 
         stage.setScene(scene);

@@ -32,7 +32,6 @@
                    <CheckMenuItem onAction="#showTimer" text="Game Timer"/>
                    <CheckMenuItem onAction="#showStepper" text="Steps Counter"/>
                    <SeparatorMenuItem/>
-                   <MenuItem text="Top 10"/>
                    <MenuItem text="My Game Stats"/>
                </Menu>
            </MenuBar>

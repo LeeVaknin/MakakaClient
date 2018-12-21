@@ -4,13 +4,10 @@ import Services.ThemeManagerService;
 import ViewModels.PipeGameViewModel;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-
 import java.net.URL;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.ResourceBundle;
+import java.util.*;
+
 
 public class PipeGameController extends Observable implements Initializable, Observer {
 
@@ -52,5 +49,7 @@ public class PipeGameController extends Observable implements Initializable, Obs
         if (o == this.vm) {
             boardDisplayer.setBoard(vm.currentBoard);
         }
+
     }
+
 }

@@ -2,6 +2,7 @@ package View;
 
 import Services.ThemeManagerService;
 import Utils.DIHelper;
+import Services.FilesLoaderService;
 import ViewModels.MainWindowViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -11,11 +12,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.FileChooser;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Observer;
 import java.util.ResourceBundle;
@@ -26,6 +26,7 @@ public class MainWindowController implements Observer, Initializable {
     // Variables
     private MainWindowViewModel vm;
     private ThemeManagerService themeManager;
+    private FilesLoaderService<BoardDisplayer> filesLoaderService;
     private StringProperty theme;
 
     // C-TORs and overrides
@@ -38,6 +39,8 @@ public class MainWindowController implements Observer, Initializable {
         // Set the vm and bind the logged in user to the vm
         this.vm = mainWindowViewModel;
         this.vm.addObserver(this);
+
+        this.filesLoaderService = new FilesLoaderService<>();
     }
 
     @Override
@@ -45,11 +48,10 @@ public class MainWindowController implements Observer, Initializable {
         try {
             URL resource = getClass().getResource("PipeGame.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(resource);
-            DIHelper.injectServiceAndVM(fxmlLoader, "PipeGameViewModel", themeManager);
+            DIHelper.injectServiceAndVM(fxmlLoader, "PipeGameViewModel", new Object[] { themeManager, this.filesLoaderService});
             StackPane gameBoard = fxmlLoader.load();
             rootBorder.centerProperty().setValue(gameBoard);
-
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IOException e) {
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IOException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
@@ -88,8 +90,13 @@ public class MainWindowController implements Observer, Initializable {
     }
 
     @FXML
-    private void showTop10() {
+    private void loadLevel() {
+        this.filesLoaderService.isGameLoadRequested.setValue(true);
+    }
 
+    @FXML
+    private void saveLevel() {
+        this.filesLoaderService.isGameSaveRequested.setValue(true);
     }
 
     @FXML
@@ -99,65 +106,6 @@ public class MainWindowController implements Observer, Initializable {
     @FXML
     private void showStepper() {
     }
-
-    @FXML
-    private void loadLevel() {
-//        TODO: Move the logic into the board logic or a service maybe?
-//        FileChooser fc = new FileChooser();
-//        fc.setTitle("Open Saved Pipes Board");
-//        fc.setInitialDirectory(new File("./resources"));
-//        // Set extension filter
-////        FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("XML Files", "*.xml");
-////        fc.getExtensionFilters().add(extentionFilter);
-//        File chosen = fc.showOpenDialog(null);
-//        if (chosen != null) {
-//            System.out.println(chosen.getName());
-//            ObjectInputStream objInput = null;
-//            try {
-//                objInput = new ObjectInputStream(new FileInputStream(chosen));
-//                PipeBoardModel savedBoard = (PipeBoardModel) objInput.readObject();
-//                boardDisplayer.setBoard(savedBoard.getBoard());
-//
-//            } catch (IOException | ClassNotFoundException e) {
-//                e.printStackTrace();
-//            }
-////            System.out.println(String.join(" ", "Loaded solution:\r\n", solution.toString()));
-//        }
-    }
-
-    @FXML
-    private void saveLevel() {
-//        TODO: Move this logic to the
-//        File selectedFile = SelectFile();
-//        if (selectedFile != null && !selectedFile.exists()) {
-//                try {
-//                    boolean created = selectedFile.createNewFile();
-//                    if (created) {
-//                        ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-//                            new BufferedOutputStream(
-//                                    new FileOutputStream(selectedFile)
-//                            ));
-//                    objectOutputStream.writeObject(vm.currentBoard);
-//                    objectOutputStream.close();
-//                }}
-//                catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-        }
-
-
-
-    private File SelectFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save Level");
-        File selectedFile = null;
-        while (selectedFile == null) {
-            selectedFile = fileChooser.showSaveDialog(null);
-        }
-        return selectedFile;
-    }
-
 
 }
 

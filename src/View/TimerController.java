@@ -1,4 +1,4 @@
-package View.Timer;
+package View;
 
 public class TimerController {
 }
