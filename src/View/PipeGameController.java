@@ -1,5 +1,6 @@
 package View;
 
+import Services.SolverService;
 import Services.ThemeManagerService;
 import ViewModels.PipeGameViewModel;
 import javafx.fxml.FXML;
@@ -50,6 +51,16 @@ public class PipeGameController extends Observable implements Initializable, Obs
             boardDisplayer.setBoard(vm.currentBoard);
         }
 
+    }
+
+    // FXMl methods
+
+    @FXML protected void solveHandle() {
+        this.vm.solve();
+    }
+
+    @FXML protected void doneHandle() {
+        this.vm.submit();
     }
 
 }

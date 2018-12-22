@@ -42,7 +42,7 @@ public class PipeBoardModel extends Observable implements Serializable {
                 result = result.concat(System.lineSeparator());
             }
         } catch (Exception ex) {
-            System.out.println("MatrixBoard.toBoard(): Error details: " + ex.getMessage());
+            System.out.println("BoardModel.toBoard(): Error details: " + ex.getMessage());
         }
         return result;
     }

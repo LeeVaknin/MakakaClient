@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -49,7 +50,7 @@ public class MainWindowController implements Observer, Initializable {
             URL resource = getClass().getResource("PipeGame.fxml");
             FXMLLoader fxmlLoader = new FXMLLoader(resource);
             DIHelper.injectServiceAndVM(fxmlLoader, "PipeGameViewModel", new Object[] { themeManager, this.filesLoaderService});
-            StackPane gameBoard = fxmlLoader.load();
+            GridPane gameBoard = fxmlLoader.load();
             rootBorder.centerProperty().setValue(gameBoard);
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IOException | InvocationTargetException e) {
             e.printStackTrace();

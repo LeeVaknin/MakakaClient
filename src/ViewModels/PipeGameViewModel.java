@@ -1,6 +1,7 @@
 package ViewModels;
 import Model.PipeBoardModel;
 import Services.FilesLoaderService;
+import Services.SolverService;
 import Utils.FileChooserHelper;
 import javafx.stage.FileChooser;
 
@@ -72,6 +73,19 @@ public class PipeGameViewModel extends Observable implements Observer {
                 this.currentBoard.setBoard(boardModel.getBoard());
             }
         }
+    }
+
+    // Solutions logics
+
+    public void solve() {
+        String strBoard = this.currentBoard.toString();
+        SolverService.solveBoard(strBoard);
+    }
+
+    public void submit() {
+        String strBoard = this.currentBoard.toString();
+        SolverService.submitBoard(strBoard);
+
     }
 }
 
