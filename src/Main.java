@@ -1,5 +1,5 @@
-import Services.ThemeManagerService;
-import Utils.DIHelper;
+import services.ThemeManagerService;
+import utils.DIHelper;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -23,7 +23,7 @@ public class Main extends Application {
 
         // Load resource and inject the themes service
         ThemeManagerService service = new ThemeManagerService();
-        URL resource = getClass().getResource("View/MainWindow.fxml");
+        URL resource = getClass().getResource("view/mainWindow/MainWindow.fxml");
 
         FXMLLoader fxmlLoader = new FXMLLoader(resource);
         DIHelper.injectServiceAndVM(fxmlLoader, "MainWindowViewModel", new Object[] { service });
