@@ -1,6 +1,10 @@
 
 .main-border {
     -fx-background-color:#e7f0fb;
+    -fx-background-image: url("image.jpg");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 550 650;
+    -fx-background-position: center center;
 }
 
 .main-menu {
