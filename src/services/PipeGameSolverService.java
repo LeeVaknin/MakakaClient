@@ -1,6 +1,7 @@
 package services;
 
 import model.PipeGameSolution;
+import model.Settings;
 import utils.ServerCommunicator;
 
 import java.awt.*;
@@ -9,10 +10,15 @@ import java.awt.*;
 // In addition it talks to the server and asks for solutions
 public class PipeGameSolverService {
 
+    private static Settings settings;
+
+    public PipeGameSolverService() {
+        settings = new Settings("127.0.0.1" , 8080);
+    }
+
     public static PipeGameSolution solveBoard(String board) {
         PipeGameSolution solution = new PipeGameSolution();
-        // TODO: replace those with saved config
-        String strSolution = ServerCommunicator.getSolutionFromServer("127.0.0.1", 2222, board);
+        String strSolution = ServerCommunicator.getSolutionFromServer(settings.getIp(), settings.getPort(), board);
         solution.fromString(strSolution);
         return solution;
     }

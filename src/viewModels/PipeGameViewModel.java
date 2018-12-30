@@ -1,11 +1,11 @@
 package viewModels;
+
 import model.PipeBoardModel;
 import model.PipeGameSolution;
 import services.FilesLoaderService;
 import services.PipeGameSolverService;
 import utils.FileChooserHelper;
 
-import javax.swing.text.Position;
 import java.awt.*;
 import java.io.File;
 import java.util.Observable;
@@ -15,10 +15,10 @@ public class PipeGameViewModel extends Observable implements Observer {
 
     // GameBoard
     public PipeBoardModel currentBoard;
-    private FilesLoaderService<PipeBoardModel> filesLoaderService;
+    private FilesLoaderService filesLoaderService;
 
     // C-TOR
-    public PipeGameViewModel(FilesLoaderService<PipeBoardModel> flservice) {
+    public PipeGameViewModel(FilesLoaderService flservice) {
         this.currentBoard = new PipeBoardModel();
         char[][] boardData = {
                 {'s','7','-', 'L'},
@@ -45,6 +45,8 @@ public class PipeGameViewModel extends Observable implements Observer {
                 this.saveCurrentLevel();
             }
         });
+
+     //   this.currentBoard.initTimer();
     }
 
     // Observer Implementation
@@ -61,7 +63,7 @@ public class PipeGameViewModel extends Observable implements Observer {
     private void saveCurrentLevel() {
         File selectedFile = FileChooserHelper.selectFileToSave();
         if (selectedFile != null && !selectedFile.exists()) {
-            boolean result =  this.filesLoaderService.saveObjectToFile(currentBoard, selectedFile);
+            boolean result =  FilesLoaderService.saveObjectToFile(currentBoard, selectedFile);
             System.out.println("Result for saving stage: " + result);
         }
     }
@@ -70,7 +72,7 @@ public class PipeGameViewModel extends Observable implements Observer {
         File chosen = FileChooserHelper.selectFileToLoad();
         if (chosen != null) {
             System.out.println(chosen.getName());
-            PipeBoardModel boardModel = this.filesLoaderService.loadFileToObject(chosen);
+            PipeBoardModel boardModel = FilesLoaderService.loadFileToObject(chosen);
             if (boardModel != null) {
                 this.currentBoard.setBoard(boardModel.getBoard());
             }
@@ -78,7 +80,6 @@ public class PipeGameViewModel extends Observable implements Observer {
     }
 
     // Solutions logics
-
 
     public PipeGameSolution solve() {
         String strBoard = this.currentBoard.toString();

@@ -1,5 +1,8 @@
 package view.mainWindow;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import services.ThemeManagerService;
 import utils.DIHelper;
 import services.FilesLoaderService;
@@ -28,7 +31,7 @@ public class MainWindowController implements Observer, Initializable {
     // Variables
     private MainWindowViewModel vm;
     private ThemeManagerService themeManager;
-    private FilesLoaderService<BoardDisplayer> filesLoaderService;
+    private FilesLoaderService filesLoaderService;
     private StringProperty theme;
 
     // C-TORs and overrides
@@ -42,7 +45,7 @@ public class MainWindowController implements Observer, Initializable {
         this.vm = mainWindowViewModel;
         this.vm.addObserver(this);
 
-        this.filesLoaderService = new FilesLoaderService<>();
+        this.filesLoaderService = new FilesLoaderService();
     }
 
     @Override
@@ -88,6 +91,7 @@ public class MainWindowController implements Observer, Initializable {
 
     @FXML
     private void showSettings() {
+        this.loadSettingsWindow();
     }
 
     @FXML
@@ -106,6 +110,27 @@ public class MainWindowController implements Observer, Initializable {
 
     @FXML
     private void showStepper() {
+    }
+
+    private void loadSettingsWindow() {
+        URL resource = getClass().getClassLoader().getResource("view/settings/Settings.fxml");
+
+        FXMLLoader fxmlLoader = new FXMLLoader(resource);
+        try {
+            DIHelper.injectServiceAndVM(fxmlLoader, "SettingsViewModel", new Object[] {});
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.toFront();
+
+            stage.show();
+
+        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | InstantiationException | IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }

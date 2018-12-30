@@ -1,33 +1,43 @@
 package model;
 
-import netscape.javascript.JSObject;
 
-public class Settings {
-    private int id;
-    private String key;
-    private JSObject value;
+import java.io.Serializable;
+import java.util.Observable;
 
-    public int getId() {
-        return id;
+public class Settings extends Observable implements Serializable {
+
+    private static String ip;
+    private static Integer port;
+    private String defaultIp = "127.0.0.1";
+    private Integer defaultPort = 8080;
+
+    public Settings(String ip, int port) {
+        setIp(ip);
+        setPort(port);
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Settings() {
     }
 
-    public String getKey() {
-        return key;
+    public String getIp() {
+        return ip;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
-    public JSObject getValue() {
-        return value;
+    public Integer getPort() {
+        return port;
     }
 
-    public void setValue(JSObject value) {
-        this.value = value;
+    public void setPort(Integer port) {
+        this.port = port;
     }
+
+    public void setDefaultValues() {
+        setIp(defaultIp);
+        setPort(defaultPort);
+    }
+
 }
