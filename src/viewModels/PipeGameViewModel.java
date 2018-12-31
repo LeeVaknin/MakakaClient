@@ -86,12 +86,18 @@ public class PipeGameViewModel extends Observable implements Observer {
         return PipeGameSolverService.solveBoard(strBoard);
     }
 
-    public void submit() {
+    public boolean submit() {
         String strBoard = this.currentBoard.toString();
         Point goalPos = this.currentBoard.findGoalPosition();
         boolean result = PipeGameSolverService.submitBoard(strBoard, goalPos);
-        if (result) System.out.println("This is the correct solution");
-        else System.out.println("This is not the correct solution");
+        if (result) {
+            System.out.println("This is the correct solution");
+            return true;
+        }
+        else {
+            System.out.println("This is not the correct solution");
+            return false;
+        }
     }
 }
 
