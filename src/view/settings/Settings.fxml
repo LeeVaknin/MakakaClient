@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<GridPane prefHeight="243.0" prefWidth="599.0" style="-fx-background-color: #FFF0F5#FFF0F5;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.settings.SettingsController">
+<GridPane fx:id="settingsPane" prefHeight="243.0" prefWidth="599.0" style="-fx-background-color: #FFF0F5#FFF0F5;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.settings.SettingsController">
     <columnConstraints>
         <ColumnConstraints halignment="RIGHT" maxWidth="Infinity" minWidth="100" prefWidth="100">
         </ColumnConstraints>
