@@ -80,11 +80,11 @@ public class PipeGameController extends Observable implements Initializable, Obs
 
     @FXML protected void doneHandle() {
         if (this.vm.submit()) {
-            showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
-                               "OH NO!", "Don't be so hasty... Try again");
-        } else {
             showAlert(Alert.AlertType.INFORMATION, stackPane.getScene().getWindow(),
                     "You made it!", "Your answer is correct. Good job!");
+        } else {
+            showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
+                               "OH NO!", "Don't be so hasty... Try again");
         }
     }
 

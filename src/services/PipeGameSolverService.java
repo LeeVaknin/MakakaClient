@@ -10,14 +10,9 @@ import java.awt.*;
 // In addition it talks to the server and asks for solutions
 public class PipeGameSolverService {
 
-    private static Settings settings;
-
-    public PipeGameSolverService() {
-        settings = new Settings("127.0.0.1" , 8080);
-    }
-
     public static PipeGameSolution solveBoard(String board) {
         PipeGameSolution solution = new PipeGameSolution();
+        Settings settings = CommonService.loadSettings();
         String strSolution = ServerCommunicator.getSolutionFromServer(settings.getIp(), settings.getPort(), board);
         solution.fromString(strSolution);
         return solution;

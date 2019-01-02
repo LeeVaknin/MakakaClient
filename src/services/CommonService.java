@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import model.Settings;
 
 import java.io.*;
 
@@ -11,7 +12,8 @@ import java.io.*;
 public class CommonService {
 
     public final String GUEST = "Guest";
-    private String USERPATH = "./resources/user";
+    private static String USERPATH = "./resources/user";
+    private static String SETTINGSPATH = "./resources/settings";
 
     public BooleanProperty isGameSaveRequested;
     public BooleanProperty isGameLoadRequested;
@@ -34,8 +36,23 @@ public class CommonService {
     }
 
     public String loadUser() {
-        File file = new File(this.USERPATH);
+        File file = new File(USERPATH);
         return loadFileToObject(file);
+    }
+
+    public static Settings loadSettings() {
+        File file = new File(SETTINGSPATH);
+        Settings currentSettings = loadFileToObject(file);
+        if (currentSettings == null) {
+            currentSettings = new Settings();
+            currentSettings.setDefaultValues();
+        }
+        return currentSettings;
+    }
+
+    public static void saveSettings(Settings settings) {
+        File file = new File(SETTINGSPATH);
+        saveObjectToFile(settings, file);
     }
 
     public static <T> boolean saveObjectToFile(T object, File selectedFile) {

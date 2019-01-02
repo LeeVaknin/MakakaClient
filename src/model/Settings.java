@@ -6,8 +6,8 @@ import java.util.Observable;
 
 public class Settings extends Observable implements Serializable {
 
-    private static String ip;
-    private static Integer port;
+    private String ip;
+    private Integer port;
     private String defaultIp = "127.0.0.1";
     private Integer defaultPort = 8080;
 
