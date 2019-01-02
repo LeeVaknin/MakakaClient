@@ -13,8 +13,18 @@ import java.util.Timer;
 public class PipeBoardModel extends Observable implements Serializable {
 
     private char[][] board;
-    private int StepsCounter;
+    private int StepsCounter = 0;
     public int mins = 0, secs = 0, millis = 0;
+
+    public int getStepsCounter() {
+        return StepsCounter;
+    }
+
+    public void setStepsCounter(int stepsCounter) {
+        StepsCounter = stepsCounter;
+        this.setChanged();
+        this.notifyObservers(stepsCounter);
+    }
 
     // Stopwatch
     public PipeBoardModel() {

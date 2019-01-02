@@ -24,17 +24,20 @@ public class PipeGameController extends Observable implements Initializable, Obs
     private Timeline timeline;
 
     // FXML Variables
+    @FXML public Text stepsCounter;
     @FXML public BoardDisplayer boardDisplayer;
     @FXML public StackPane stackPane;
     @FXML public Text stopWatch;
 
     // C-TOR
     public PipeGameController(ThemeManagerService themeManager, PipeGameViewModel vm) {
+
         this.vm = vm;
         this.vm.addObserver(this);
 
         this.themeManager = themeManager;
         this.themeManager.addObserver(this);
+
     }
 
     // Overrides
@@ -48,6 +51,10 @@ public class PipeGameController extends Observable implements Initializable, Obs
             boardDisplayer.widthProperty().bind(stackPane.widthProperty());
             boardDisplayer.heightProperty().bind(stackPane.heightProperty());
             boardDisplayer.setBoard(vm.currentBoard);
+
+            stepsCounter.textProperty().bind(this.vm.stepsCounterProperty.asString());
+
+            // timer.textProperty().bindBidirectional(this.vm.currentBoard.getGameTimer());
         }
         this.updateText(this.stopWatch);
         this.initStopwatch();
@@ -132,8 +139,7 @@ public class PipeGameController extends Observable implements Initializable, Obs
         int millis = this.vm.currentBoard.millis;
 
         text.setText((((mins/10) == 0) ? "0" : "") + mins + ":"
-                + (((secs/10) == 0) ? "0" : "") + secs + ":"
-                + (((millis/10) == 0) ? "00" : (((millis/100) == 0) ? "0" : "")) + millis);
+                + (((secs/10) == 0) ? "0" : "") + secs);
     }
 
 }

@@ -1,5 +1,7 @@
 package viewModels;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import model.PipeBoardModel;
 import model.PipeGameSolution;
 import services.CommonService;
@@ -17,9 +19,12 @@ public class PipeGameViewModel extends Observable implements Observer {
     // GameBoard
     public PipeBoardModel currentBoard;
     private CommonService commonService;
+    public IntegerProperty stepsCounterProperty;
 
     // C-TOR
     public PipeGameViewModel(CommonService flservice) {
+
+        this.stepsCounterProperty = new SimpleIntegerProperty();
 
         this.initBoard();
         // Listen to the requests to save/load games
@@ -37,8 +42,6 @@ public class PipeGameViewModel extends Observable implements Observer {
                 this.saveCurrentLevel();
             }
         });
-
-     //   this.currentBoard.initTimer();
     }
 
     private void initBoard() {
@@ -60,7 +63,9 @@ public class PipeGameViewModel extends Observable implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (o == this.currentBoard) {
-            System.out.println("The board has changed and the Pipe game view model knows about it");
+            if (arg != null) {
+              this.stepsCounterProperty.setValue(this.currentBoard.getStepsCounter());
+            }
             setChanged();
             notifyObservers();
         }

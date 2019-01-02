@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
 import java.io.*;
@@ -26,7 +25,6 @@ import java.util.ResourceBundle;
 
 
 public class MainWindowController implements Observer, Initializable {
-
 
     // Variables
     private MainWindowViewModel vm;
@@ -72,8 +70,7 @@ public class MainWindowController implements Observer, Initializable {
     @FXML protected void handleToggleAction(ActionEvent t) {
         if (theme.getValue().equals("Dark")) {
             theme.setValue("Bright");
-        }
-        else {
+        } else {
             theme.setValue("Dark");
         }
     }
