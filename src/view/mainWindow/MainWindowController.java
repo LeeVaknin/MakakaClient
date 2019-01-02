@@ -2,10 +2,11 @@ package view.mainWindow;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import services.ThemeManagerService;
 import utils.DIHelper;
-import services.FilesLoaderService;
+import services.CommonService;
 import viewModels.MainWindowViewModel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -16,8 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import view.pipeGame.BoardDisplayer;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -28,11 +27,13 @@ import java.util.ResourceBundle;
 
 public class MainWindowController implements Observer, Initializable {
 
+
     // Variables
     private MainWindowViewModel vm;
     private ThemeManagerService themeManager;
-    private FilesLoaderService filesLoaderService;
+    private CommonService commonService;
     private StringProperty theme;
+    private StringProperty userNamePropery;
 
     // C-TORs and overrides
     public MainWindowController(ThemeManagerService themeManagerService, MainWindowViewModel mainWindowViewModel) {
@@ -45,20 +46,12 @@ public class MainWindowController implements Observer, Initializable {
         this.vm = mainWindowViewModel;
         this.vm.addObserver(this);
 
-        this.filesLoaderService = new FilesLoaderService();
+        this.commonService = new CommonService();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            URL resource = getClass().getClassLoader().getResource("view/pipeGame/PipeGame.fxml");
-            FXMLLoader fxmlLoader = new FXMLLoader(resource);
-            DIHelper.injectServiceAndVM(fxmlLoader, "PipeGameViewModel", new Object[] { themeManager, this.filesLoaderService});
-            GridPane gameBoard = fxmlLoader.load();
-            rootBorder.centerProperty().setValue(gameBoard);
-        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | IOException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        this.loadMainWindow();
     }
 
     @Override
@@ -69,16 +62,12 @@ public class MainWindowController implements Observer, Initializable {
             themeToggle.textProperty().bindBidirectional(theme);
 
         }
-        if (o == this.vm){
-            this.vm.userName.bindBidirectional(userName.textProperty());
-        }
-
     }
 
     // FXMl variables
-    @FXML protected TextField userName;
     @FXML protected Button themeToggle;
     @FXML protected  BorderPane rootBorder;
+    @FXML protected Text loggedInUser;
 
     @FXML protected void handleToggleAction(ActionEvent t) {
         if (theme.getValue().equals("Dark")) {
@@ -96,12 +85,12 @@ public class MainWindowController implements Observer, Initializable {
 
     @FXML
     private void loadLevel() {
-        this.filesLoaderService.isGameLoadRequested.setValue(true);
+        this.commonService.isGameLoadRequested.setValue(true);
     }
 
     @FXML
     private void saveLevel() {
-        this.filesLoaderService.isGameSaveRequested.setValue(true);
+        this.commonService.isGameSaveRequested.setValue(true);
     }
 
     @FXML
@@ -112,27 +101,62 @@ public class MainWindowController implements Observer, Initializable {
     private void showStepper() {
     }
 
-    private void loadSettingsWindow() {
-        URL resource = getClass().getClassLoader().getResource("view/settings/Settings.fxml");
-
-        FXMLLoader fxmlLoader = new FXMLLoader(resource);
-        try {
-            DIHelper.injectServiceAndVM(fxmlLoader, "SettingsViewModel", new Object[] {});
-            Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setScene(scene);
-            stage.toFront();
-
-            stage.show();
-
-        } catch (ClassNotFoundException | IllegalAccessException | InvocationTargetException | InstantiationException | IOException e) {
-            e.printStackTrace();
-        }
-
-
+    private void handleLoginUpdate() {
+        String newNickname = this.commonService.loggedInUser.getValue();
+        this.loggedInUser.setText(newNickname);
+        if (newNickname.equals(this.commonService.GUEST))
+            this.loadLoginView();
+        else
+            this.loadBoard();
     }
 
+    // load views
+
+    private void loadMainWindow() {
+        if (this.loggedInUser == null )
+            this.loggedInUser = new Text();
+        this.loggedInUser.setText(this.commonService.loggedInUser.getValue());
+
+        // subscribe to change
+        this.commonService.loggedInUser.addListener(change -> this.handleLoginUpdate());
+        this.handleLoginUpdate();
+    }
+
+    private Parent createView(String vmName,String resourcePath, Object[] services) {
+        URL resource = getClass().getClassLoader().getResource(resourcePath);
+        FXMLLoader fxmlLoader = new FXMLLoader(resource);
+        try {
+            DIHelper.injectServiceAndVM(fxmlLoader, vmName, services);
+            return fxmlLoader.load();
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | InvocationTargetException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private void loadBoard() {
+        loadCentralView("PipeGameViewModel", "view/pipeGame/PipeGame.fxml", new Object[] { themeManager, this.commonService});
+    }
+
+    private void loadSettingsWindow() {
+        Parent view = this.createView("SettingsViewModel", "view/settings/Settings.fxml", new Object[] {} );
+        if (view == null) return;
+        Scene scene = new Scene(view);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.toFront();
+        stage.show();
+    }
+
+    private void loadCentralView(String vmName,String resourcePath, Object[] services) {
+        Parent parent = createView(vmName, resourcePath, services);
+        rootBorder.setCenter(null);
+        rootBorder.centerProperty().setValue(parent);
+    }
+
+    private void loadLoginView() {
+        loadCentralView("LoginViewModel", "view/login/Login.fxml", new Object[] { this.commonService});
+    }
 }
 
 

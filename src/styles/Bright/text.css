@@ -1,0 +1,10 @@
+.username-text {
+ -fx-font-smoothing-type: lcd;
+ -fx-fill: white;
+}
+
+.login-text {
+ -fx-font-smoothing-type: lcd;
+ -fx-fill: #102d53;
+ -fx-font-size: 12pt;
+}

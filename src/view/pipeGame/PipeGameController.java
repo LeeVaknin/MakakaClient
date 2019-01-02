@@ -50,13 +50,16 @@ public class PipeGameController extends Observable implements Initializable, Obs
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (boardDisplayer != null) {
+            if (this.themeManager.getTheme() != null )
+                boardDisplayer.setThemeModel(this.themeManager.getTheme());
+            if (this.vm.currentBoard != null)
+                boardDisplayer.setBoard(vm.currentBoard);
             boardDisplayer.widthProperty().bind(stackPane.widthProperty());
             boardDisplayer.heightProperty().bind(stackPane.heightProperty());
             boardDisplayer.setBoard(vm.currentBoard);
             // timer.textProperty().bindBidirectional(this.vm.currentBoard.getGameTimer());
         }
     }
-
 
     @Override
     public void update(Observable o, Object arg) {
@@ -66,7 +69,6 @@ public class PipeGameController extends Observable implements Initializable, Obs
         if (o == this.vm) {
             boardDisplayer.setBoard(vm.currentBoard);
         }
-
     }
 
     // FXMl methods

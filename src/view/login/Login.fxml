@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="view.login.LoginController">
+    <center>
+        <VBox fx:id="loginDialog"
+              opacity="0.8"
+              alignment="CENTER"
+              fillWidth="false"
+              maxHeight="-Infinity"
+              maxWidth="-Infinity"
+              prefHeight="200.0"
+              prefWidth="200.0"
+              scaleShape="false"
+              spacing="20.0"
+              styleClass="vbox">
+            <Text text="Please fill your nick name to start the game."
+                  styleClass="login-text"/>
+            <TextField fx:id="userName"
+                       promptText="Nickname"
+                       styleClass="text-field" />
+            <Button mnemonicParsing="false" onAction="#handleLogin" styleClass="main-button" text="Save Nickname" />
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </VBox>
+    </center>
+
+
+</BorderPane>

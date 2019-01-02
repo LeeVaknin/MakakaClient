@@ -2,7 +2,7 @@ package viewModels;
 
 
 import model.Settings;
-import services.FilesLoaderService;
+import services.CommonService;
 
 import java.io.File;
 import java.util.Observable;
@@ -31,7 +31,7 @@ public class SettingsViewModel extends Observable implements Observer {
 
         // Saving the settings object into a local file
         File selectedFile = new File(this.resources, serverSettingsFile);
-        boolean result = FilesLoaderService.saveObjectToFile(saveStr, selectedFile);
+        boolean result = CommonService.saveObjectToFile(saveStr, selectedFile);
         System.out.println("Result for saving ip and port: " + result);
 
     }
@@ -39,7 +39,7 @@ public class SettingsViewModel extends Observable implements Observer {
     public void loadSettings() {
         currentSettings = new Settings();
         File chosen = new File(this.resources, serverSettingsFile);
-        String serverSettings = FilesLoaderService.loadFileToObject(chosen);
+        String serverSettings = CommonService.loadFileToObject(chosen);
         if (serverSettings != null) {
             // loading settings from local file
             String[] str = serverSettings.split(delimiter);

@@ -2,7 +2,7 @@ package viewModels;
 
 import model.PipeBoardModel;
 import model.PipeGameSolution;
-import services.FilesLoaderService;
+import services.CommonService;
 import services.PipeGameSolverService;
 import utils.FileChooserHelper;
 
@@ -15,10 +15,10 @@ public class PipeGameViewModel extends Observable implements Observer {
 
     // GameBoard
     public PipeBoardModel currentBoard;
-    private FilesLoaderService filesLoaderService;
+    private CommonService commonService;
 
     // C-TOR
-    public PipeGameViewModel(FilesLoaderService flservice) {
+    public PipeGameViewModel(CommonService flservice) {
         this.currentBoard = new PipeBoardModel();
         char[][] boardData = {
                 {'s','7','-', 'L'},
@@ -31,21 +31,20 @@ public class PipeGameViewModel extends Observable implements Observer {
         this.currentBoard.addObserver(this);
 
         // Listen to the requests to save/load games
-        this.filesLoaderService = flservice;
-        this.filesLoaderService.isGameLoadRequested.addListener( event -> {
-            if (this.filesLoaderService.isGameLoadRequested.getValue()) {
-                this.filesLoaderService.isGameLoadRequested.setValue(false);
+        this.commonService = flservice;
+        this.commonService.isGameLoadRequested.addListener(event -> {
+            if (this.commonService.isGameLoadRequested.getValue()) {
+                this.commonService.isGameLoadRequested.setValue(false);
                 this.loadLevelFromDisk();
             }
         });
 
-        filesLoaderService.isGameSaveRequested.addListener(event -> {
-            if (filesLoaderService.isGameSaveRequested.getValue()) {
-                filesLoaderService.isGameSaveRequested.setValue(false);
+        commonService.isGameSaveRequested.addListener(event -> {
+            if (commonService.isGameSaveRequested.getValue()) {
+                commonService.isGameSaveRequested.setValue(false);
                 this.saveCurrentLevel();
             }
         });
-
      //   this.currentBoard.initTimer();
     }
 
@@ -63,7 +62,7 @@ public class PipeGameViewModel extends Observable implements Observer {
     private void saveCurrentLevel() {
         File selectedFile = FileChooserHelper.selectFileToSave();
         if (selectedFile != null && !selectedFile.exists()) {
-            boolean result =  FilesLoaderService.saveObjectToFile(currentBoard, selectedFile);
+            boolean result =  CommonService.saveObjectToFile(currentBoard, selectedFile);
             System.out.println("Result for saving stage: " + result);
         }
     }
@@ -72,7 +71,7 @@ public class PipeGameViewModel extends Observable implements Observer {
         File chosen = FileChooserHelper.selectFileToLoad();
         if (chosen != null) {
             System.out.println(chosen.getName());
-            PipeBoardModel boardModel = FilesLoaderService.loadFileToObject(chosen);
+            PipeBoardModel boardModel = CommonService.loadFileToObject(chosen);
             if (boardModel != null) {
                 this.currentBoard.setBoard(boardModel.getBoard());
             }

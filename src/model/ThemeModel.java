@@ -70,6 +70,8 @@ public class ThemeModel extends Observable {
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/mainStyles.css");
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/textField.css");
         this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/button.css");
+        this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/boxes.css");
+        this.stage.getScene().getStylesheets().add(this.styleSheetPath + "/text.css");
         setChanged();
         notifyObservers();
     }

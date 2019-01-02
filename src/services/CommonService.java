@@ -2,19 +2,40 @@ package services;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.io.*;
 
 
-public class FilesLoaderService {
+public class CommonService {
+
+    public final String GUEST = "Guest";
+    private String USERPATH = "./resources/user";
 
     public BooleanProperty isGameSaveRequested;
     public BooleanProperty isGameLoadRequested;
+    public StringProperty loggedInUser;
+
     private static boolean created = false;
 
-    public FilesLoaderService() {
+    public CommonService() {
         isGameSaveRequested = new SimpleBooleanProperty(false);
         isGameLoadRequested = new SimpleBooleanProperty(false);
+
+        String username = loadUser();
+
+        loggedInUser = new SimpleStringProperty(username != null ? username : this.GUEST);
+    }
+
+    public void saveUser(String username) {
+        File file = new File(this.USERPATH);
+        saveObjectToFile(username, file);
+    }
+
+    public String loadUser() {
+        File file = new File(this.USERPATH);
+        return loadFileToObject(file);
     }
 
     public static <T> boolean saveObjectToFile(T object, File selectedFile) {
@@ -42,10 +63,8 @@ public class FilesLoaderService {
             objInput = new ObjectInputStream(new FileInputStream(chosenFile));
             return (T) objInput.readObject();
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("The file couldn't be loaded.");
         }
         return null;
     }
-
-
 }

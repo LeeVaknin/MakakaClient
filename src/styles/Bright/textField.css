@@ -1,8 +1,9 @@
-
 .text-field {
     -fx-background-color: #e7f0fb, -fx-background ;
     -fx-background-insets: 0, 0 0 1 0 ;
     -fx-background-radius: 0 ;
+     -fx-min-width: 80;
+     -fx-min-height: 50;
 }
 
 .text-field:focused {
