@@ -1,10 +1,18 @@
 .username-text {
  -fx-font-smoothing-type: lcd;
- -fx-fill: white;
+ -fx-fill: #B0C4DE;
+ -fx-font-weight: bold;
 }
 
 .login-text {
  -fx-font-smoothing-type: lcd;
  -fx-fill: #102d53;
  -fx-font-size: 12pt;
+}
+
+.stopwatch-text {
+ -fx-font-smoothing-type: lcd;
+ -fx-fill: #102d53;
+ -fx-font-weight: bold;
+ -fx-font-size: 13pt;
 }

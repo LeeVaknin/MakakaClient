@@ -18,11 +18,12 @@ public class PipeGameSolverService {
         return solution;
     }
 
-    public static boolean submitBoard(String board, Point goalPosition) {
+    public static int submitBoard(String board, Point goalPosition) {
         PipeGameSolution solution = solveBoard(board);
-        if (solution == null ) return false;
+        if (solution == null || solution.getSteps().size() == 0 ) return -1;
         Point resultPosition = solution.getSteps().get(0).getPosition();
-        return solution.getSteps().size() == 1 &&
+        boolean result = solution.getSteps().size() == 1 &&
                 resultPosition.x == goalPosition.x && resultPosition.y == goalPosition.y;
+        return result ? 1 : 0;
     }
 }

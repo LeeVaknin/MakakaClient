@@ -6,11 +6,8 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="rootBorder" minHeight="400" minWidth="400" styleClass="main-border" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.mainWindow.MainWindowController">
@@ -27,8 +24,6 @@
                <Menu text="Game">
                    <CheckMenuItem onAction="#showTimer" text="Game Timer" />
                    <CheckMenuItem onAction="#showStepper" text="Steps Counter" />
-                   <SeparatorMenuItem />
-                   <MenuItem text="My Game Stats" />
                </Menu>
            </MenuBar>
            <Text fx:id="loggedInUser" styleClass="username-text"/>

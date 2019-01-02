@@ -1,19 +1,23 @@
 package model;
+import javafx.animation.Timeline;
+
 import javax.swing.text.Position;
 import java.awt.*;
 import java.io.Serializable;
 import java.time.Duration;
+import java.time.Instant;
 import java.util.Observable;
+import java.util.Timer;
 
 
 public class PipeBoardModel extends Observable implements Serializable {
 
     private char[][] board;
     private int StepsCounter;
-    private Duration gameDuration;
+    public int mins = 0, secs = 0, millis = 0;
 
+    // Stopwatch
     public PipeBoardModel() {
-
     }
 
     public void setBoard(String newBoard) {
@@ -92,4 +96,5 @@ public class PipeBoardModel extends Observable implements Serializable {
         }
         return null;
     }
+
 }
