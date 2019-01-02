@@ -3,10 +3,12 @@ package view.pipeGame;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.control.Alert;
+import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Window;
 import javafx.util.Duration;
 import model.PipeGameSolution;
+import services.CommonService;
 import services.ThemeManagerService;
 import viewModels.PipeGameViewModel;
 import javafx.fxml.FXML;
@@ -22,21 +24,25 @@ public class PipeGameController extends Observable implements Initializable, Obs
     private PipeGameViewModel vm;
     private ThemeManagerService themeManager;
     private Timeline timeline;
+    private CommonService commonService;
 
     // FXML Variables
     @FXML public Text stepsCounter;
     @FXML public BoardDisplayer boardDisplayer;
     @FXML public StackPane stackPane;
     @FXML public Text stopWatch;
+    @FXML public GridPane pipeGameGrid;
 
     // C-TOR
-    public PipeGameController(ThemeManagerService themeManager, PipeGameViewModel vm) {
+    public PipeGameController(ThemeManagerService themeManager, CommonService commonService, PipeGameViewModel vm) {
 
         this.vm = vm;
         this.vm.addObserver(this);
 
         this.themeManager = themeManager;
         this.themeManager.addObserver(this);
+
+        this.commonService = commonService;
 
     }
 
@@ -58,6 +64,14 @@ public class PipeGameController extends Observable implements Initializable, Obs
         }
         this.updateText(this.stopWatch);
         this.initStopwatch();
+
+
+        commonService.isFailedLoadingNewLevel.addListener(event -> {
+            if (commonService.isFailedLoadingNewLevel.getValue() == -1) {
+                CommonService.showAlert(Alert.AlertType.ERROR, pipeGameGrid.getScene().getWindow(),
+                        "Failed Loading new Level", "Something went wrong during board parsing.\nPlease validate your board format again.");
+            }
+        });
     }
 
     @Override
@@ -68,6 +82,7 @@ public class PipeGameController extends Observable implements Initializable, Obs
         if (o == this.vm) {
             boardDisplayer.setBoard(vm.currentBoard);
             this.initStopwatch();
+            stepsCounter.textProperty().bind(this.vm.stepsCounterProperty.asString());
         }
     }
 
@@ -77,7 +92,7 @@ public class PipeGameController extends Observable implements Initializable, Obs
         this.timeline.stop();
         PipeGameSolution solution = this.vm.solve();
         if (solution == null || solution.getSteps().size() == 0) {
-            showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
+            CommonService.showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
                     "Something Went Wrong", "We couldn't reach the server." );
             return;
         }
@@ -87,24 +102,16 @@ public class PipeGameController extends Observable implements Initializable, Obs
     @FXML protected void doneHandle() {
         this.timeline.stop();
         if (this.vm.submit() == 1) {
-            showAlert(Alert.AlertType.INFORMATION, stackPane.getScene().getWindow(),
+            CommonService.showAlert(Alert.AlertType.INFORMATION, stackPane.getScene().getWindow(),
                     "You made it!", "Your answer is correct. Good job!");
         } else if (this.vm.submit() == 0) {
-            showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
+            CommonService.showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
                                "OH NO!", "Don't be so hasty... Try again");
         } else
-            showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
+            CommonService.showAlert(Alert.AlertType.ERROR, stackPane.getScene().getWindow(),
                     "Something Went Wrong", "We couldn't reach the server." );
     }
 
-    private void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
-    }
 
     // stopwatch
 
@@ -136,7 +143,6 @@ public class PipeGameController extends Observable implements Initializable, Obs
     private void updateText(Text text) {
         int mins = this.vm.currentBoard.mins;
         int secs = this.vm.currentBoard.secs;
-        int millis = this.vm.currentBoard.millis;
 
         text.setText((((mins/10) == 0) ? "0" : "") + mins + ":"
                 + (((secs/10) == 0) ? "0" : "") + secs);

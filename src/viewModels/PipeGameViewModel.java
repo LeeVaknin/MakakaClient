@@ -2,6 +2,7 @@ package viewModels;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.scene.control.Alert;
 import model.PipeBoardModel;
 import model.PipeGameSolution;
 import services.CommonService;
@@ -42,6 +43,13 @@ public class PipeGameViewModel extends Observable implements Observer {
                 this.saveCurrentLevel();
             }
         });
+
+        commonService.isNewLevelRequested.addListener(event -> {
+            if (commonService.isNewLevelRequested.getValue()) {
+                commonService.isNewLevelRequested.setValue(false);
+                commonService.isFailedLoadingNewLevel.setValue(this.loadNewLevel());
+            }
+        });
     }
 
     private void initBoard() {
@@ -76,6 +84,7 @@ public class PipeGameViewModel extends Observable implements Observer {
             this.currentBoard.deleteObservers();
         this.currentBoard = currentBoard;
         this.currentBoard.addObserver(this);
+        this.stepsCounterProperty.setValue(currentBoard.getStepsCounter());
         this.setChanged();
         this.notifyObservers(currentBoard);
     }
@@ -100,7 +109,31 @@ public class PipeGameViewModel extends Observable implements Observer {
         }
     }
 
-    // Solutions logics
+    // -1 - failed loading board
+    // 0 - canceled loading board
+    // 1 - succeeded
+    private int loadNewLevel() {
+        File chosen = FileChooserHelper.selectStringLevelToLoad();
+        if (chosen != null) {
+            System.out.println(chosen.getName());
+            String strBoard = CommonService.loadFileToString(chosen);
+            if (strBoard != null && !strBoard.isEmpty()) {
+                PipeBoardModel newLevel = new PipeBoardModel();
+                newLevel.setBoard(strBoard);
+                if (newLevel.getBoard() == null
+                        || newLevel.getBoard().length <= 0
+                        || newLevel.getBoard()[0].length <= 0 ) {
+                    return -1;
+                }
+                this.setCurrentBoard(newLevel);
+                return 1;
+            }
+            return -1;
+        }
+        return 0;
+    }
+
+    // Solutions logic
 
     public PipeGameSolution solve() {
         String strBoard = this.currentBoard.toString();

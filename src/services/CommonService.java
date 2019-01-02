@@ -1,22 +1,24 @@
 package services;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.scene.control.Alert;
+import javafx.stage.Window;
 import model.Settings;
 
 import java.io.*;
+import java.util.Scanner;
 
 
 public class CommonService {
 
     public final String GUEST = "Guest";
-    private static String USERPATH = "./resources/user";
-    private static String SETTINGSPATH = "./resources/settings";
+    private static String USERPATH = "./resources/settings/user";
+    private static String SETTINGSPATH = "./resources/settings/settings";
 
     public BooleanProperty isGameSaveRequested;
     public BooleanProperty isGameLoadRequested;
+    public BooleanProperty isNewLevelRequested;
+    public IntegerProperty isFailedLoadingNewLevel;
     public StringProperty loggedInUser;
 
     private static boolean created = false;
@@ -24,6 +26,8 @@ public class CommonService {
     public CommonService() {
         isGameSaveRequested = new SimpleBooleanProperty(false);
         isGameLoadRequested = new SimpleBooleanProperty(false);
+        isNewLevelRequested = new SimpleBooleanProperty(false);
+        isFailedLoadingNewLevel = new SimpleIntegerProperty(0);
 
         String username = loadUser();
 
@@ -31,7 +35,7 @@ public class CommonService {
     }
 
     public void saveUser(String username) {
-        File file = new File(this.USERPATH);
+        File file = new File(USERPATH);
         saveObjectToFile(username, file);
     }
 
@@ -84,4 +88,28 @@ public class CommonService {
         }
         return null;
     }
+
+    public static String loadFileToString(File chosenFile) {
+        StringBuilder fileContents = new StringBuilder((int)chosenFile.length());
+
+        try (Scanner scanner = new Scanner(chosenFile)) {
+                while(scanner.hasNextLine()) {
+                    fileContents.append(scanner.nextLine()).append(System.lineSeparator());
+                }
+                return fileContents.toString();
+            } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    public static void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.initOwner(owner);
+        alert.show();
+    }
+
 }

@@ -31,7 +31,6 @@ public class MainWindowController implements Observer, Initializable {
     private ThemeManagerService themeManager;
     private CommonService commonService;
     private StringProperty theme;
-    private StringProperty userNamePropery;
 
     // C-TORs and overrides
     public MainWindowController(ThemeManagerService themeManagerService, MainWindowViewModel mainWindowViewModel) {
@@ -89,13 +88,9 @@ public class MainWindowController implements Observer, Initializable {
     private void saveLevel() {
         this.commonService.isGameSaveRequested.setValue(true);
     }
-
     @FXML
-    private void showTimer() {
-    }
-
-    @FXML
-    private void showStepper() {
+    private void loadNewLevel() {
+        this.commonService.isNewLevelRequested.setValue(true);
     }
 
     private void handleLoginUpdate() {
@@ -132,7 +127,8 @@ public class MainWindowController implements Observer, Initializable {
     }
 
     private void loadBoard() {
-        loadCentralView("PipeGameViewModel", "view/pipeGame/PipeGame.fxml", new Object[] { themeManager, this.commonService});
+        loadCentralView("PipeGameViewModel", "view/pipeGame/PipeGame.fxml",
+                new Object[] { themeManager, this.commonService, this.commonService});
     }
 
     private void loadSettingsWindow() {

@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.stage.Window;
+import services.CommonService;
 import viewModels.SettingsViewModel;
 
 import java.net.URL;
@@ -31,17 +32,17 @@ public class SettingsController extends Observable implements Observer, Initiali
     @FXML
     protected void handleSubmitSettingsButtonAction() {
         if(ipField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, settingsPane.getScene().getWindow(), "Error!", "Please enter ip");
+            CommonService.showAlert(Alert.AlertType.ERROR, settingsPane.getScene().getWindow(), "Error!", "Please enter ip");
             return;
         }
         if(portField.getText().isEmpty()) {
-            showAlert(Alert.AlertType.ERROR, settingsPane.getScene().getWindow(), "Error!", "Please enter port");
+            CommonService.showAlert(Alert.AlertType.ERROR, settingsPane.getScene().getWindow(), "Error!", "Please enter port");
             return;
         }
         this.vm.saveSettings(ipField.getText() , Integer.parseInt(portField.getText()));
         final Stage stage = (Stage) settingsPane.getScene().getWindow();
         stage.close();
-        showAlert(Alert.AlertType.INFORMATION, settingsPane.getScene().getWindow(), "Settings were set Successfully!", "Ip: " + ipField.getText() + "\nPort: " + portField.getText());
+        CommonService.showAlert(Alert.AlertType.INFORMATION, settingsPane.getScene().getWindow(), "Settings were set Successfully!", "Ip: " + ipField.getText() + "\nPort: " + portField.getText());
     }
 
     @Override
@@ -65,14 +66,5 @@ public class SettingsController extends Observable implements Observer, Initiali
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.setFields();
-    }
-
-    public void showAlert(Alert.AlertType alertType, Window owner, String title, String message) {
-        Alert alert = new Alert(alertType);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.initOwner(owner);
-        alert.show();
     }
 }

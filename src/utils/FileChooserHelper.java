@@ -18,4 +18,13 @@ public class FileChooserHelper {
         fileChooser.setInitialDirectory(new File("./resources"));
         return fileChooser.showOpenDialog(null);
     }
+
+    public static File selectStringLevelToLoad() {
+        fileChooser.setTitle("Please Choose a txt File With Your Board Level");
+        FileChooser.ExtensionFilter extentionFilter = new FileChooser.ExtensionFilter("Text Files", "*.txt");
+        fileChooser.getExtensionFilters().add(extentionFilter);
+
+        fileChooser.setInitialDirectory(new File("./resources"));
+        return fileChooser.showOpenDialog(null);
+    }
 }

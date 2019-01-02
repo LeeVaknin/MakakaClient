@@ -63,7 +63,7 @@ public class PipeBoardModel extends Observable implements Serializable {
         return result;
     }
 
-    public char[][] convertFromStringToBoard(String strBoard) {
+    private char[][] convertFromStringToBoard(String strBoard) {
         char[][] tmpBoard = null;
         try {
             if (strBoard == null)
@@ -86,6 +86,7 @@ public class PipeBoardModel extends Observable implements Serializable {
             }
         } catch (Exception ex) {
             System.out.println("MatrixBoard.toBoard(): Error details: " + ex.getMessage());
+            tmpBoard = null;
         }
         return tmpBoard;
     }
