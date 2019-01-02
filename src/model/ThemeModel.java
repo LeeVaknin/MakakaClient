@@ -120,7 +120,7 @@ public class ThemeModel extends Observable {
     public void setTheme() {
         if (this.stage.getScene() != null) {
             this.loadStyleSheet();
-          //  this.loadBackgroundMusic();
+            this.loadBackgroundMusic();
             this.loadGameChildImages();
         }
     }
